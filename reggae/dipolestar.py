@@ -46,6 +46,8 @@ class DipoleStar:
         self.bounds = self.get_bounds()
         self.l1model.n_g = self.select_n_g()
 
+        self.soften = 1
+
     def __call__(self, dynamic=False, **kwargs):
 
         kwargs = {**dict(periodic=[3], reflective=[7]), **kwargs}
@@ -55,21 +57,21 @@ class DipoleStar:
         else:
             sampler = dynesty.NestedSampler(self.ln_like, self.ptform, ndim, **kwargs)
 
-        sampler.run_nested()
         self.sampler = sampler
+        sampler.run_nested()
         return self.summarise()
 
     def summarise(self, sampler=None):
         if sampler is None:
-            sampler = getattr(self, sampler, None)
+            sampler = getattr(self, "sampler", None)
 
         if sampler is not None:
             sampler = self.sampler
             self.DYresult = sampler.results
             samples = self.DYresult.samples
             weights = np.exp(self.DYresult.logwt - self.DYresult.logz[-1])
-            mean, cov = dyfunc.mean_and_cov(samples, weights)
-            new_samples = dyfunc.resample_equal(samples, weights)
+            mean, cov = dynesty.utils.mean_and_cov(samples, weights)
+            new_samples = dynesty.utils.resample_equal(samples, weights)
 
             return {
                 'mean': mean,
@@ -104,7 +106,7 @@ class DipoleStar:
     @partial(jax.jit, static_argnums=(0,))
     def ln_like(self, θ):
         m = self.model(θ)
-        return -jnp.sum(jnp.log(m) + self.s / m)
+        return -jnp.sum(jnp.log(m) + self.s / m) / self.soften
 
     def get_bounds(self):
         bounds = {'deltaPi0'   : (0.875, 0.925), # 0

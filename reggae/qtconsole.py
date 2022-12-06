@@ -12,6 +12,7 @@ from matplotlib.backends.backend_qtagg import (
 from matplotlib.figure import Figure
 
 from astropy import units as u
+from pbjam.star import star as PbjamStar
 
 from . import DipoleStar
 from .theta import ThetaReg
@@ -36,8 +37,30 @@ plt.rcParams['backend'] = 'QtAgg'
 
 class ReggaeDebugWindow(QtWidgets.QMainWindow):
 
-    def __init__(self):
+    def __init__(self, input=None, session=None):
+
+        qapp = QtWidgets.QApplication.instance()
+        self.qapp = qapp
+        if not qapp:
+            qapp = QtWidgets.QApplication(sys.argv)
+
         super().__init__()
+        self.init_ui()
+
+        if isinstance(input, DipoleStar):
+            self.load_reggae(reggae=input)
+        elif isinstance(input, PbjamStar):
+            self.load_pbjam(pbjam=input)
+
+        if session is not None:
+            self.load(session)
+
+        self.show()
+        self.activateWindow()
+        self.raise_()
+        qapp.exec()
+
+    def init_ui(self):
 
         self._main = QtWidgets.QSplitter()
         self.setCentralWidget(self._main)
@@ -316,6 +339,23 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
 
         layout.addRow("Diff-evol Iterations", pair)
 
+        textbox = QtWidgets.QDoubleSpinBox()
+        textbox.setSingleStep(.01)
+        textbox.setDecimals(5)
+        textbox.setValue(1/200)
+        textbox.setMinimum(0)
+        textbox.setMaximum(1)
+        spinboxes['lw'] = textbox
+        layout.addRow("PSD Model Linewidth (Δν)", textbox)
+
+        textbox = QtWidgets.QDoubleSpinBox()
+        textbox.setSingleStep(1)
+        textbox.setDecimals(3)
+        textbox.setValue(1)
+        textbox.setMinimum(0)
+        textbox.setMaximum(100)
+        spinboxes['soften'] = textbox
+        layout.addRow("Likelihood softening factor", textbox)
 
         pair  = QtWidgets.QHBoxLayout()
 
@@ -422,6 +462,7 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         # self.threadpool.start(worker)
 
     def recompute(self):
+        self.sync_state()
         θreg, norm = self.get_state()
         self.replot(θreg, norm, label='Manual')
 
@@ -563,8 +604,9 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
             with open(fname[0], 'wb') as f:
                 dill.dump(obj, f)
 
-    def load_pbjam(self):
-        pbjam = self.load_pickle("Open PBJam pickle file")
+    def load_pbjam(self, *, pbjam=None):
+        if pbjam is None:
+            pbjam = self.load_pickle("Open PBJam pickle file")
         if pbjam is not None:
             try:
                 self.reggae = DipoleStar(pbjam)
@@ -573,8 +615,9 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
             except Exception:
                 self.print("Invalid pickle contents")
 
-    def load_reggae(self):
-        reggae = self.load_pickle("Open Reggae pickle file")
+    def load_reggae(self, *, reggae=None):
+        if reggae is None:
+            reggae = self.load_pickle("Open Reggae pickle file")
         if reggae is not None:
             try:
                 assert(isinstance(reggae, DipoleStar))
@@ -709,13 +752,18 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         stop = self.n_g_lims['upper'].value()
         self.reggae.l1model.n_g = np.arange(start, stop+1)[::-1]
 
-        # 2. MCMC bounds
+        # 2. PSD Model options
+
+        self.reggae.l1model.lw = self.spinboxes['lw'].value()
+        self.reggae.soften = self.spinboxes['soften'].value()
+
+        # 3. MCMC bounds
 
         self.reggae.bounds = self.get_bounds()
 
-    def load(self):
-
-        session = self.load_pickle("Load session variables from pickle file")
+    def load(self, *, session=None):
+        if session is None:
+            session = self.load_pickle("Load session variables from pickle file")
         if session is not None:
             try:
                 spinboxes = session['spinboxes']
@@ -737,7 +785,7 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
                 self.print(f"Loaded session")
                 self.sync_state()
             except Exception as e:
-                self.print("Failed to load session: expected pickle file to contain dict.")
+                self.print("Failed to load session: expected object to be dict.")
                 self.print(f"{str(e)}")
 
     def print(self, text):
@@ -770,11 +818,11 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
 
         # only update bounds for certain quantities
 
-        self.bounds[f"dPi0_0"].setValue(θ_reg.dPi0 * 1.1)
-        self.bounds[f"dPi0_1"].setValue(θ_reg.dPi0 / 1.1)
+        self.bounds[f"dPi0_0"].setValue(θ_reg.dPi0 / 1.1)
+        self.bounds[f"dPi0_1"].setValue(θ_reg.dPi0 * 1.1)
 
-        self.bounds[f"log_omega_rot_0"].setValue(θ_reg.log_omega_rot + .5)
-        self.bounds[f"log_omega_rot_1"].setValue(θ_reg.log_omega_rot - .5)
+        self.bounds[f"log_omega_rot_0"].setValue(θ_reg.log_omega_rot - .5)
+        self.bounds[f"log_omega_rot_1"].setValue(θ_reg.log_omega_rot + .5)
         self.sync_state()
 
     def dynesty(self):
@@ -800,6 +848,9 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
 
     def dump_reggae(self):
         self.write_pickle(self.reggae, "Save reggae object to pickle file")
+
+    def closeEvent(self, *args):
+        ...
 
 
 class Signals(QtCore.QObject):
