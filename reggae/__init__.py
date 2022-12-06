@@ -1,0 +1,1 @@
+from .dipolestar import DipoleStar
