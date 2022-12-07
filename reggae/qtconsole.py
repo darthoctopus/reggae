@@ -13,6 +13,7 @@ from matplotlib.figure import Figure
 
 from astropy import units as u
 from pbjam.star import star as PbjamStar
+from corner import corner
 
 from . import DipoleStar
 from .theta import ThetaReg
@@ -666,6 +667,8 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         ax.clear()
         ax.figure.canvas.draw()
 
+        self.plot_MCMC()
+
         # populate textboxes
 
         self.n_g_lims['lower'].setValue(self.reggae.l1model.n_g[-1])
@@ -830,6 +833,7 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         self.print("Beginning Dynesty run…")
         self.dynesty_result = self.reggae(dynamic=self.checkboxes['dynamic'].isChecked())
         self.print("Complete.")
+        self.plot_MCMC()
 
     def get_state(self):
         return ThetaReg(**{_: self.spinboxes[_].value() for _ in FIELDS if _ != 'norm'}), self.spinboxes['norm'].value()
@@ -848,6 +852,18 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
 
     def dump_reggae(self):
         self.write_pickle(self.reggae, "Save reggae object to pickle file")
+
+    def plot_MCMC(self):
+        sampler = getattr(self.reggae, "sampler", None)
+        if sampler is None:
+            return
+
+        self.dynesty_result = self.reggae.summarise()
+        samples = self.dynesty_result['new_samples']
+
+        fig = self._ax['MCMC']
+        corner(samples, labels=DipoleStar.labels, fig=fig)
+        fig.canvas.draw()
 
     def closeEvent(self, *args):
         ...
