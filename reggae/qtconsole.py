@@ -506,9 +506,19 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         ylims = ax.get_ylim()
         dnu = 10**self.reggae.theta_asy.log_dnu
 
-        nu1, zeta = self.reggae.l1model.getl1(self.reggae.theta_asy, θreg)
-        m = (nu1 < np.max(self.reggae.f + dnu))&(nu1>np.min(self.reggae.f))
-        sizes = np.power(1-zeta[m], 2/3) * 40
+        nu1 = {}
+        zeta = {}
+        δν_rot = 10.**θreg.log_omega_rot / reggae.nu_to_omega
+
+        if self.checkboxes['m'].isChecked():
+            ms = (-1, 0, 1)
+        else:
+            ms = (0,)
+
+        for m in ms:
+            nu1[m], zeta[m] = self.reggae.l1model.getl1(self.reggae.theta_asy, θreg, dnu_g=m * δν_rot)
+
+        m = (nu1[0] < np.max(self.reggae.f + dnu))&(nu1[0]>np.min(self.reggae.f))
 
         if self.checkboxes['m'].isChecked():
             labels = [f"{label}{_}" for _ in ('_+', '_-', '')]
@@ -520,11 +530,10 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
                         d[f"{label}_{_}"].remove()
                         del d[f"{label}_{_}"]
 
-        δν_rot = 10.**θreg.log_omega_rot / reggae.nu_to_omega
-
         for l in labels:
             mm = (1 if '_+' in l else (-1 if '_-' in l else 0))
-            nu = nu1[m] + mm * zeta[m] * δν_rot
+            nu = nu1[mm][m]
+            sizes = np.power(1-zeta[mm][m], 2/3) * 40
             if l not in self._echelle_points:
                 self._echelle_points[l] = ax.scatter(nu % dnu, (nu // dnu) * dnu,
                                                             s=sizes, edgecolor='white',
@@ -557,8 +566,6 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         if not len(ax.collections):
             return
 
-        sizes = np.power(zeta[m], 2/3) * 40
-
         ν_p = self.get_ν_p()
         ΔΠ1 = self.get_ΔΠ()
         q = self.spinboxes['q'].value()
@@ -567,7 +574,8 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
 
         for l in labels:
             mm = (1 if '_+' in l else (-1 if '_-' in l else 0))
-            nu = nu1[m] + mm * zeta[m] * δν_rot
+            nu = nu1[mm][m]
+            sizes = np.power(zeta[mm][m], 2/3) * 40
 
             # replication
             x = np.concatenate([(τ_(nu) / ΔΠ1) % 1 + _ for _ in (-1, 0, 1)])

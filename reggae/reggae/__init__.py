@@ -233,7 +233,7 @@ class reggae():
     @staticmethod
     @jax.jit
     def getl1(n_g, nu0_p, numax, dnu, d02, alpha_p, nmax, n_p,
-              d01, dPi0, p_L, p_D, epsilon_g, alpha_g, dnu_p=0, dnu_g=0):
+              d01, dPi0, p_L, p_D, epsilon_g, alpha_g, *, dnu_p=0, dnu_g=0):
 
         nu1_p = nu0_p + dnu / 2 - d02/3 + d01 * dnu + dnu_p # TODO better way to estimate p-like l1's??
 

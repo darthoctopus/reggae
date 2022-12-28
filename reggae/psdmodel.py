@@ -33,17 +33,7 @@ class PSDModel(reggae, asymptotic):
     #     self.lw = lw
     #     self.n_g = None
 
-    def _l1model(self, nu1s, zeta, numax, dnu, env_width, theta_reg, Pmax=0.1, amps=None,
-        **kwargs):
-
-        H = self._P_envelope(nu1s, Pmax, numax, env_width)
-        if amps is not None:
-            H = H * amps
-
-        return super().l1model_rot(self.f, nu1s, zeta, dnu, 10.**theta_reg.log_omega_rot, inc=theta_reg.inclination,
-                               amps=H, **kwargs)
-    
-    def getl1(self, theta_asy, theta_reg):
+    def getl1(self, theta_asy, theta_reg, **kwargs):
 
         numax = 10.**(theta_asy.log_numax)
         dnu = 10.**(theta_asy.log_dnu)
@@ -57,9 +47,9 @@ class PSDModel(reggae, asymptotic):
         return super().getl1(self.n_g,
             nu_0, numax, dnu, d02, alpha, nmax, n_p,
             theta_reg.d01, theta_reg.dPi0, theta_reg.p_L, theta_reg.p_D, theta_reg.epsilon_g,
-            theta_reg.alpha_g)
+            theta_reg.alpha_g, **kwargs)
 
-    def l1model(self, theta_asy, theta_reg, update_n_g=False):
+    def _l1model(self, theta_asy, theta_reg, update_n_g=False, amps=None, dnu_p=0, dnu_g=0):
 
         nu_0 = theta_asy.nu_0(self.n_orders)
 
@@ -74,7 +64,19 @@ class PSDModel(reggae, asymptotic):
                 [0, 1]
                 )
 
-        nu_1, zeta = self.getl1(theta_asy, theta_reg)
+        nu_1, zeta = self.getl1(theta_asy, theta_reg, dnu_p=dnu_p, dnu_g=dnu_g)
+        H = self._P_envelope(nu_1, theta_reg.normalisation, numax, env_width)
+        if amps is not None:
+            H = H * amps
         lw = jnp.sqrt((zeta*0+dnu*self.lw)**2 + (10.**(theta_asy.log_mode_width))**2)
 
-        return self._l1model(nu_1, zeta, numax, dnu, env_width, theta_reg, lw=lw, Pmax=theta_reg.normalisation)
+        return super().l1model(self.f, nu_1, zeta, dnu, amps=H, lw=lw)
+
+    def l1model(self, theta_asy, theta_reg, **kwargs):
+        dnu_g = 10.**theta_reg.log_omega_rot /  reggae.nu_to_omega
+        inc = theta_reg.inclination
+        return (
+            self._l1model(theta_asy, theta_reg, dnu_g=0, **kwargs) * jnp.cos(inc)**2
+            + self._l1model(theta_asy, theta_reg, dnu_g=-dnu_g, **kwargs) * jnp.sin(inc)**2 / 2
+            + self._l1model(theta_asy, theta_reg, dnu_g= dnu_g, **kwargs) * jnp.sin(inc)**2 / 2
+        )
