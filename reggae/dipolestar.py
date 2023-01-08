@@ -168,6 +168,12 @@ class DipoleStar:
 
         return np.mean(acc, axis=0)
 
+    def get_pbjam_l0(self):
+        return np.array([row['mean'] for label, row in self.star.peakbag.summary.iterrows() if 'l0' in label])
+
+    def get_pbjam_l2(self):
+        return np.array([row['mean'] for label, row in self.star.peakbag.summary.iterrows() if 'l2' in label])
+
     # optimisation tasks
 
     def simplex(self, θ_reg, norm, **kwargs):

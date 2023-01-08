@@ -322,6 +322,11 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
 
         layout.addRow("n_g limits", pair)
 
+        checkbox = QtWidgets.QCheckBox("Use l = 0 mode frequencies from pbjam", None)
+        self.checkboxes['pbjam_l0'] = checkbox
+        checkbox.clicked.connect(self.sync_state)
+        layout.addRow(checkbox)
+
         pair  = QtWidgets.QHBoxLayout()
 
         textbox = QtWidgets.QDoubleSpinBox()
@@ -721,8 +726,8 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         theta_reg = self.get_state()[0]
 
         dnu = 10.**(theta_asy.log_dnu)
-        nu_0 = theta_asy.nu_0(self.reggae.l1model.n_orders)
-        d02 = 10.**(theta_asy.log_d02)
+        nu_0 = self.reggae.l1model.get_nu_0(theta_asy)
+        d02 = self.reggae.l1model.get_d02(theta_asy)
         d01 = theta_reg.d01
         nu_1 = nu_0 + dnu / 2 - d02/3 + d01 * dnu
 
@@ -771,6 +776,15 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         # 3. MCMC bounds
 
         self.reggae.bounds = self.get_bounds()
+
+        # 4. pbjam l0?
+
+        if self.checkboxes['pbjam_l0'].isChecked():
+            self.reggae.l1model.nu_0 = self.reggae.get_pbjam_l0()
+            self.reggae.l1model.nu_2 = self.reggae.get_pbjam_l2()
+        else:
+            self.reggae.l1model.nu_0 = None
+            self.reggae.l1model.nu_2 = None
 
     def load(self, *, session=None):
         if session is None:

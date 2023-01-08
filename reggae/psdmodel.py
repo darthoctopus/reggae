@@ -7,12 +7,13 @@ from .asymptotic import asymptotic
 
 class PSDModel(reggae, asymptotic):
 
-    def __init__(self, f, n_orders, lw=1/200, nu_0=None, *args, **kwargs):
+    def __init__(self, f, n_orders, lw=1/200, nu_0=None, nu_2=None, *args, **kwargs):
         self.f = f
         self.n_orders = n_orders
         self.lw = lw
         self.n_g = None
         self.nu_0 = nu_0
+        self.nu_2 = nu_2
 
     # def init_psdmodel(self, f, numax, nu_0, d02, env_width, alpha_p=0, lw=1/50):
     #     self.f = f
@@ -34,19 +35,28 @@ class PSDModel(reggae, asymptotic):
     #     self.lw = lw
     #     self.n_g = None
 
-    def nu_0(self, theta_asy):
+    def get_nu_0(self, theta_asy):
         if self.nu_0 is not None:
             return self.nu_0
         return theta_asy.nu_0(self.n_orders)
+
+    def get_nu_2(self, theta_asy):
+        if self.nu_2 is not None:
+            return self.nu_2
+
+    def get_d02(self, theta_asy):
+        if self.nu_2 is not None and self.nu_0 is not None:
+            return self.get_nu_0(None) - self.get_nu_2(None)
+        return 10.**(theta_asy.log_d02)
 
     def getl1(self, theta_asy, theta_reg, **kwargs):
 
         numax = 10.**(theta_asy.log_numax)
         dnu = 10.**(theta_asy.log_dnu)
-        d02 = 10.**(theta_asy.log_d02)
+        d02 = self.get_d02(theta_asy)
         alpha = 10.**(theta_asy.log_alpha)
 
-        nu_0 = self.nu_0(theta_asy)
+        nu_0 = self.get_nu_0(theta_asy)
         nmax = theta_asy.nmax()
         n_p = theta_asy.n_p(self.n_orders)
 
@@ -57,7 +67,7 @@ class PSDModel(reggae, asymptotic):
 
     def _l1model(self, theta_asy, theta_reg, update_n_g=False, amps=None, dnu_p=0, dnu_g=0):
 
-        nu_0 = self.nu_0(theta_asy)
+        nu_0 = self.get_nu_0(theta_asy)
 
         numax = 10.**(theta_asy.log_numax)
         dnu = 10.**(theta_asy.log_dnu)
