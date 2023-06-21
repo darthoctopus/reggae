@@ -90,9 +90,10 @@ class PSDModel(reggae, asymptotic):
 
     def l1model(self, theta_asy, theta_reg, **kwargs):
         dnu_g = 10.**theta_reg.log_omega_core /  reggae.nu_to_omega
+        dnu_p = 10.**theta_reg.log_omega_env /  reggae.nu_to_omega
         inc = theta_reg.inclination
         return (
-            self._l1model(theta_asy, theta_reg, dnu_g=0, **kwargs) * jnp.cos(inc)**2
-            + self._l1model(theta_asy, theta_reg, dnu_g=-dnu_g, **kwargs) * jnp.sin(inc)**2 / 2
-            + self._l1model(theta_asy, theta_reg, dnu_g= dnu_g, **kwargs) * jnp.sin(inc)**2 / 2
+            self._l1model(theta_asy, theta_reg, dnu_g=0, dnu_p=0, **kwargs) * jnp.cos(inc)**2
+            + self._l1model(theta_asy, theta_reg, dnu_g=-dnu_g, dnu_p=-dnu_p, **kwargs) * jnp.sin(inc)**2 / 2
+            + self._l1model(theta_asy, theta_reg, dnu_g= dnu_g, dnu_p=dnu_p,**kwargs) * jnp.sin(inc)**2 / 2
         )

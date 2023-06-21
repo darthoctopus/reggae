@@ -19,8 +19,9 @@ class ThetaReg:
     d01: float
     alpha_g: float
     inclination: float
+    log_omega_env: float
 
-    dims = 8
+    dims = 9
 
     def asarray(self):
         return jnp.array(astuple(self))
@@ -33,6 +34,7 @@ class ThetaReg:
                    [-.1, .1],
                    [-.01, .01],
                    [0, jnp.pi/2],
+                   [-2, .5],
                   ])
     normalisation = 1
 

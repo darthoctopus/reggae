@@ -159,6 +159,7 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         spinboxes['alpha_g'].setValue(0)
         spinboxes['d01'].setValue(0)
         spinboxes['log_omega_core'].setValue(-100)
+        spinboxes['log_omega_env'].setValue(-100)
         spinboxes['inclination'].setValue(np.pi/4)
 
         pair  = QtWidgets.QHBoxLayout()
@@ -513,7 +514,8 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
 
         nu1 = {}
         zeta = {}
-        δν_rot = 10.**θreg.log_omega_core / reggae.nu_to_omega
+        δν_core = 10.**θreg.log_omega_core / reggae.nu_to_omega
+        δν_env = 10.**θreg.log_omega_env / reggae.nu_to_omega
 
         if self.checkboxes['m'].isChecked():
             ms = (-1, 0, 1)
@@ -521,7 +523,7 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
             ms = (0,)
 
         for m in ms:
-            nu1[m], zeta[m] = self.reggae.l1model.getl1(self.reggae.theta_asy, θreg, dnu_g=m * δν_rot)
+            nu1[m], zeta[m] = self.reggae.l1model.getl1(self.reggae.theta_asy, θreg, dnu_g=m * δν_core, dnu_p=m * δν_env)
 
         m = (nu1[0] < np.max(self.reggae.f + dnu))&(nu1[0]>np.min(self.reggae.f))
 
