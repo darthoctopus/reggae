@@ -15,7 +15,7 @@ class ThetaReg:
     p_L: float
     p_D: float
     epsilon_g: float
-    log_omega_rot: float
+    log_omega_core: float
     d01: float
     alpha_g: float
     inclination: float

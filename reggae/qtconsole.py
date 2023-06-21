@@ -158,7 +158,7 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         spinboxes['epsilon_g'].setValue(.5)
         spinboxes['alpha_g'].setValue(0)
         spinboxes['d01'].setValue(0)
-        spinboxes['log_omega_rot'].setValue(-100)
+        spinboxes['log_omega_core'].setValue(-100)
         spinboxes['inclination'].setValue(np.pi/4)
 
         pair  = QtWidgets.QHBoxLayout()
@@ -513,7 +513,7 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
 
         nu1 = {}
         zeta = {}
-        δν_rot = 10.**θreg.log_omega_rot / reggae.nu_to_omega
+        δν_rot = 10.**θreg.log_omega_core / reggae.nu_to_omega
 
         if self.checkboxes['m'].isChecked():
             ms = (-1, 0, 1)
@@ -846,8 +846,8 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         self.bounds[f"dPi0_0"].setValue(θ_reg.dPi0 / 1.1)
         self.bounds[f"dPi0_1"].setValue(θ_reg.dPi0 * 1.1)
 
-        self.bounds[f"log_omega_rot_0"].setValue(θ_reg.log_omega_rot - .5)
-        self.bounds[f"log_omega_rot_1"].setValue(θ_reg.log_omega_rot + .5)
+        self.bounds[f"log_omega_core_0"].setValue(θ_reg.log_omega_core - .5)
+        self.bounds[f"log_omega_core_1"].setValue(θ_reg.log_omega_core + .5)
         self.sync_state()
 
     def dynesty(self):
