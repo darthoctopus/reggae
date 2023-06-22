@@ -20,8 +20,9 @@ from .reggae import reggae
 class DipoleStar:
 
     labels=[r'$\Delta\Pi_0$ (relative)', '$L_0$', '$D_0$', r'$\epsilon_g$',
-                r'$\log \omega_\text{rot}/\mu$Hz', r'$\delta\epsilon_{p1}$',
-                r'$\alpha_g$', r'$i$/rad', r'Normalisation'
+                r'$\log \omega_\text{core}/\mu$Hz', r'$\delta\epsilon_{p1}$',
+                r'$\alpha_g$', r'$i$/rad',r'$\log \omega_\text{env}/\mu$Hz',
+                r'Normalisation'
                ]
 
     def __init__(self, star):
@@ -101,7 +102,7 @@ class DipoleStar:
 
     @partial(jax.jit, static_argnums=(0,))
     def model(self, θ):
-        return self.l1model.l1model(self.theta_asy, ThetaReg(*θ[:8])) * θ[8] + 1
+        return self.l1model.l1model(self.theta_asy, ThetaReg(*θ[:9])) * θ[9] + 1
 
     @partial(jax.jit, static_argnums=(0,))
     def ln_like(self, θ):
