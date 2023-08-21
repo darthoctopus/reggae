@@ -1,3 +1,4 @@
+import os
 import sys
 import time
 import traceback
@@ -132,6 +133,17 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         layout.addWidget(canvas)
         # this is a FIGURE OBJECT, NOT an Axes object
         self._ax['MCMC'] = canvas.figure
+
+        # Help
+
+        textview = QtWidgets.QPlainTextEdit()
+        textview.setFont(QtGui.QFont("Monospace"))
+
+        with open(os.path.join(os.path.dirname(__file__),"help.txt"), 'r') as f:
+            helptext = f.read()
+        textview.setPlainText(helptext)
+        
+        left.addTab(textview, "Help")
 
         #--- RIGHT PANE ---
 

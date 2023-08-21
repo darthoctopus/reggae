@@ -1,0 +1,9 @@
+REGGAE HELP
+===========
+
+1. Manual parameter tuning
+
+Recommended order of parameter sweeps (with others held constant) is
+normalisation, then ΔΠ, then coupling strengths, then (if rotational
+splittings are evident) rotation rate with trial inclination, then
+inclination.
