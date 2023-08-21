@@ -20,8 +20,8 @@ from .reggae import reggae
 class DipoleStar:
 
     labels=[r'$\Delta\Pi_0$ (relative)', '$L_0$', '$D_0$', r'$\epsilon_g$',
-                r'$\log \omega_\text{core}/\mu$Hz', r'$\delta\epsilon_{p1}$',
-                r'$\alpha_g$', r'$i$/rad',r'$\log \omega_\text{env}/\mu$Hz',
+                r'$\log \omega_\mathrm{core}/\mu$Hz', r'$\delta\epsilon_{p1}$',
+                r'$\alpha_g$', r'$i$/rad',r'$\log \omega_\mathrm{env}/\mu$Hz',
                 r'Normalisation'
                ]
 

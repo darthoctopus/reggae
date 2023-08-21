@@ -755,7 +755,7 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
             x0=self.spinboxes['x0'].value(), x1=self.spinboxes['x1'].value(),
             vmin=np.median(self.reggae.s), vmax=self.spinboxes['norm'].value())
 
-        ax.set_xlabel(r"$(\tau /\Delta\Pi_1) \mod 1$")
+        ax.set_xlabel(r"$(\tau /\Delta\Pi_1)$ mod $1$")
         ax.set_ylabel(r"$\nu/\mu$Hz")
         ax.figure.canvas.draw()
 
