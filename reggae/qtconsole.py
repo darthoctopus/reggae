@@ -82,8 +82,8 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         left.addTab(widget, "Data Plots")
 
         ts_canvas = FigureCanvas(Figure())
-        layout.addWidget(NavigationToolbar(ts_canvas, self))
-        layout.addWidget(ts_canvas)
+        # layout.addWidget(NavigationToolbar(ts_canvas, self))
+        # layout.addWidget(ts_canvas)
         self._ax['ts'] = ts_canvas.figure.subplots()
 
         ps_canvas = FigureCanvas(Figure())
