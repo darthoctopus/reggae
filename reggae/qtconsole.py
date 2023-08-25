@@ -13,7 +13,7 @@ from matplotlib.backends.backend_qtagg import (
 from matplotlib.figure import Figure
 
 from astropy import units as u
-from pbjam.star import star as PbjamStar
+from pbjam import star as PbjamStar
 from corner import corner
 
 from . import DipoleStar
