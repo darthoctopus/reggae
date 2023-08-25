@@ -25,22 +25,27 @@ class DipoleStar:
                 r'Normalisation'
                ]
 
-    def __init__(self, star):
+    def __init__(self, s=None, f=None):
+        self.s = s
+        self.f = f
+
+    @classmethod
+    def from_pbjam(klass, star):
         assert isinstance(star, pbjam.star), "Must be passed a pbjam star object"
-        self.star = star
 
         # divide out l = 0,2 modes
-        pbjam_model = self.make_pbjam_model(star.peakbag, star.pg.frequency.value)
-        self.s = star.s / pbjam_model
-        self.f = star.f
+        pbjam_model = klass.make_pbjam_model(star)
 
-        self.pg = self.star.pg
+        self = klass(np.array(star.s / pbjam_model), star.f)
+        self.s_raw = np.array(star.s)
+
+        self.pg = star.pg
         self.pg.power = u.Quantity(self.s)
 
         # theta_asy
 
-        nu0, self.theta_asy = self._prepare_theta_asy(star)
-        self.norders = len(nu0)
+        self.nu0, self.nu2, self.theta_asy = self._prepare_theta_asy(star)
+        self.norders = len(self.nu0)
         self.nmax = 10**(self.theta_asy.log_numax - self.theta_asy.log_dnu) - self.theta_asy.eps
         self.l1model = PSDModel(self.f, self.norders)
 
@@ -48,6 +53,10 @@ class DipoleStar:
         self.l1model.n_g = self.select_n_g()
 
         self.soften = 1
+
+        self.ID = star.ID
+
+        return self
 
     def __call__(self, dynamic=False, **kwargs):
 
@@ -143,7 +152,7 @@ class DipoleStar:
         dnu = np.median(np.diff(nu_0))
 
         mean = lambda x: float(star.asy_fit.summary.loc[x]['mean'])
-        return nu_0, ThetaAsy(
+        return nu_0, nu_2, ThetaAsy(
                 log_numax=mean('numax'),
                 log_dnu=np.log10(dnu),
                 eps=mean('eps'),
@@ -155,7 +164,11 @@ class DipoleStar:
             )
 
     @staticmethod
-    def make_pbjam_model(peakbag, freq, n_samples=50):
+    def make_pbjam_model(star, n_samples=50):
+
+        peakbag = star.peakbag
+        freq = star.pg.frequency.value
+
         peakbag.ladder_f = np.array(freq)[None, :]
         n = peakbag.ladder_s.shape[0]
         par_names = ['l0', 'l2', 'width0', 'width2', 'height0', 'height2',
@@ -168,12 +181,6 @@ class DipoleStar:
             acc[i] = np.sum(z - bg[:, None], axis=0) +1
 
         return np.mean(acc, axis=0)
-
-    def get_pbjam_l0(self):
-        return np.array([row['mean'] for label, row in self.star.peakbag.summary.iterrows() if 'l0' in label])
-
-    def get_pbjam_l2(self):
-        return np.array([row['mean'] for label, row in self.star.peakbag.summary.iterrows() if 'l2' in label])
 
     # optimisation tasks
 

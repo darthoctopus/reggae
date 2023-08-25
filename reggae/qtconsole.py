@@ -637,9 +637,9 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
             pbjam = self.load_pickle("Open PBJam pickle file")
         if pbjam is not None:
             try:
-                self.reggae = DipoleStar(pbjam)
+                self.reggae = DipoleStar.from_pbjam(pbjam)
                 self.load_reggae_actions()
-                self.print(f"Loaded pbjam star with ID {self.reggae.star.ID}")
+                self.print(f"Loaded pbjam star with ID {self.reggae.ID}")
             except Exception:
                 self.print("Invalid pickle contents")
 
@@ -651,7 +651,7 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
                 assert(isinstance(reggae, DipoleStar))
                 self.reggae = reggae
                 self.load_reggae_actions()
-                self.print(f"Loaded reggae object with ID {self.reggae.star.ID}")
+                self.print(f"Loaded reggae object with ID {self.reggae.ID}")
             except Exception:
                 self.print("Invalid pickle contents")
 
@@ -663,7 +663,7 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
 
         ax = self._ax['ps']
         ax.clear()
-        ax.plot(self.reggae.star.f, self.reggae.star.s, c='black', label="Original SNR")
+        ax.plot(self.reggae.f, self.reggae.s_raw, c='black', label="Original SNR")
         ax.plot(self.reggae.f, self.reggae.s, label=r"Divided by $\ell = 0, 2$")
         ax.set_ylabel(r"SNR")
         ax.set_xlabel(r"$\nu/\mu$Hz")
@@ -794,8 +794,8 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         # 4. pbjam l0?
 
         if self.checkboxes['pbjam_l0'].isChecked():
-            self.reggae.l1model.nu_0 = self.reggae.get_pbjam_l0()
-            self.reggae.l1model.nu_2 = self.reggae.get_pbjam_l2()
+            self.reggae.l1model.nu_0 = self.reggae.nu0
+            self.reggae.l1model.nu_2 = self.reggae.nu2
         else:
             self.reggae.l1model.nu_0 = None
             self.reggae.l1model.nu_2 = None
