@@ -80,7 +80,7 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
 
         widget = QtWidgets.QWidget()
         layout = QtWidgets.QVBoxLayout(widget)
-        left.addTab(widget, "Data Plots")
+        left.addTab(widget, "Power Spectrum")
 
         ts_canvas = FigureCanvas(Figure())
         # layout.addWidget(NavigationToolbar(ts_canvas, self))
@@ -126,7 +126,7 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
 
         widget = QtWidgets.QWidget()
         layout = QtWidgets.QVBoxLayout(widget)
-        left.addTab(widget, "MCMC")
+        left.addTab(widget, "Posteriors")
 
         canvas = FigureCanvas(Figure())
         layout.addWidget(NavigationToolbar(canvas, self))
@@ -160,19 +160,10 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
             edit = QtWidgets.QDoubleSpinBox()
             edit.setSingleStep(.01)
             edit.setDecimals(5)
-            edit.setValue(1)
             edit.setMinimum(-1e5)
             edit.setMaximum(1e5)
             spinboxes[field] = edit
             layout.addRow(f"{field}", edit)
-
-        # set some reasonable default values
-        spinboxes['epsilon_g'].setValue(.5)
-        spinboxes['alpha_g'].setValue(0)
-        spinboxes['d01'].setValue(0)
-        spinboxes['log_omega_core'].setValue(-100)
-        spinboxes['log_omega_env'].setValue(-100)
-        spinboxes['inclination'].setValue(np.pi/4)
 
         pair  = QtWidgets.QHBoxLayout()
 
@@ -294,7 +285,6 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
                 textbox.setDecimals(5)
                 textbox.setMinimum(-1e5)
                 textbox.setMaximum(1e5)
-                textbox.setValue(BOUNDS[i][j])
                 bounds[f"{field}_{j}"] = textbox
 
                 pair.addWidget(textbox)
@@ -309,6 +299,7 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
             layout.addRow(f"{field}", pair)
 
         self.bounds = bounds
+
         button = QtWidgets.QPushButton("Recompute from Current θ_reg", None)
         button.clicked.connect(self.newbounds)
         layout.addRow(button)
@@ -361,7 +352,6 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         textbox = QtWidgets.QDoubleSpinBox()
         textbox.setSingleStep(.01)
         textbox.setDecimals(5)
-        textbox.setValue(1/200)
         textbox.setMinimum(0)
         textbox.setMaximum(1)
         spinboxes['lw'] = textbox
@@ -370,7 +360,6 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         textbox = QtWidgets.QDoubleSpinBox()
         textbox.setSingleStep(1)
         textbox.setDecimals(3)
-        textbox.setValue(1)
         textbox.setMinimum(0)
         textbox.setMaximum(100)
         spinboxes['soften'] = textbox
@@ -387,7 +376,6 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         button.clicked.connect(self.dynesty)
         pair.addWidget(button)
         layout.addRow(pair)
-
 
         # Console
 
@@ -435,6 +423,12 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         button_action.triggered.connect(self.dump_reggae)
         toolbar.addAction(button_action)
 
+        button_action = QtGui.QAction("Reset", self)
+        button_action.setStatusTip("Reset GUI to default values")
+        button_action.triggered.connect(self.reset)
+        toolbar.addAction(button_action)
+
+        self.reset()
         self.print("Initialised Reggae Console.")
 
     def tqdm(self, gen, total=None, **kwargs):
@@ -903,6 +897,22 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
 
     def closeEvent(self, *args):
         ...
+
+    def reset(self):
+        for i, _ in enumerate(FIELDS):
+            self.spinboxes[_].setValue(1)
+            for j in (0, 1):
+                self.bounds[f"{_}_{j}"].setValue(BOUNDS[i][j])
+
+        self.spinboxes['epsilon_g'].setValue(.5)
+        self.spinboxes['alpha_g'].setValue(0)
+        self.spinboxes['d01'].setValue(0)
+        self.spinboxes['log_omega_core'].setValue(-100)
+        self.spinboxes['log_omega_env'].setValue(-100)
+        self.spinboxes['inclination'].setValue(np.pi/4)
+
+        self.spinboxes['lw'].setValue(1/200)
+        self.spinboxes['soften'].setValue(1)
 
 
 class Signals(QtCore.QObject):
