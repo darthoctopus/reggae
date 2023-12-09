@@ -1,6 +1,8 @@
-numpy >= 1.17.0
+numpy == 1.25.0
 matplotlib>=1.5.3
 lightkurve>=2.0.0
 dynesty
 jax
-zeta
+zeta @ git+https://gitlab.com/darthoctopus/zeta.git
+pbjam == 1.0.1
+PyQt6
