@@ -17,11 +17,6 @@ affiliations:
  - name: "School of Physics and Astronomy, University of Birmingham, Birmingham B15 2TT, UK"
    index: 3
 bibliography: biblio.bib
-author:
-	- J. M. Joel Ong
-	- Martin B. Nielsen
-	- Emily J. Hatt
-	- Guy R. Davies
 date: \today
 ---
 
@@ -42,8 +37,6 @@ We have constrained these global parameters for a preliminary sample of subgiant
 To produce mixed modes, we must specify both pure g-mode frequencies --- which we describe using a period spacing $\Delta\Pi$, a g-mode phase offset $\epsilon_g$, and an analogous curvature parameter $\alpha_g$ to that used in the p-mode parameterisation --- as well as coupling between the p- and g-modes. For this `PBJam` will adopt the matrix-eigenvalue parameterisation of [@deheuvels_insights_2010], supplemented with a secondary inner-product matrix as described in [@ong_semianalytic_2020] to account for the nonorthogonality of the notional pure p- and g-mode eigenfunctions. This parameterisation is used instead of the classical asymptotic description [e.g. @{1979PASJ...31...87S}] in light of its intended application to subgiants specifically. Numerically, these matrices are scaled from values supplied by a reference MESA model [from the grid of @lindsay] using parameters $p_\mathrm{L}$ and $p_\mathrm{D}$. The correspondence between these matrices and the classical coupling strength $q$ is described in @ong_rotation_2023. Rotation in the p- and g-mode cavities are separately parameterised with $\log \Omega_\mathrm{p}$ and $\log \Omega_\mathrm{g}$, and a shared inclination parameter $i$, with rotating mixed modes computed fully accounting for near-degeneracy effects.
 
 `Reggae` fine-tunes these parameters by numerical optimization, which requires a PSD model that can be compared to the observed residual spectrum. This model is a sum of Lorentzian profiles, one for each of the predicted dipole modes. Their linewidths are artificially broadened to a fraction of $\Delta\nu$, smoothing over local minima in the likelihood function. Their heights follow the same Gaussian envelope as `PBjam`'s model for the $\ell=2,0$ pairs, with additional modulation by mixing fractions $\zeta$ from mode coupling.
-
-\begin
 
 ![Screenshot of the GUI showing visualisation panel and manual inputs.\label{fig:screenshot}](echelle.png)
 
