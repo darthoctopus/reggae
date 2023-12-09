@@ -17,6 +17,12 @@ affiliations:
  - name: "School of Physics and Astronomy, University of Birmingham, Birmingham B15 2TT, UK"
    index: 3
 bibliography: biblio.bib
+author:
+	- J. M. Joel Ong
+	- Martin B. Nielsen
+	- Emily J. Hatt
+	- Guy R. Davies
+date: \today
 ---
 
 # Summary
@@ -37,7 +43,9 @@ To produce mixed modes, we must specify both pure g-mode frequencies --- which w
 
 `Reggae` fine-tunes these parameters by numerical optimization, which requires a PSD model that can be compared to the observed residual spectrum. This model is a sum of Lorentzian profiles, one for each of the predicted dipole modes. Their linewidths are artificially broadened to a fraction of $\Delta\nu$, smoothing over local minima in the likelihood function. Their heights follow the same Gaussian envelope as `PBjam`'s model for the $\ell=2,0$ pairs, with additional modulation by mixing fractions $\zeta$ from mode coupling.
 
-![Screenshot of the GUI showing visualisation panel and manual inputs.\label{fig:screenshot}](gui.png)
+\begin
+
+![Screenshot of the GUI showing visualisation panel and manual inputs.\label{fig:screenshot}](echelle.png)
 
 These visualization and tuning features are operated through a graphical user interface (GUI), illustrated in \autoref{fig:screenshot}. The visualisation tools are provided on the left of the interface. Manual guesses and parameter bounds provide initial guesses for simplex or genetic-algorithm optimization. Alternatively all parameters can be sampled at once using the Dynesty nested sampling package [@dynesty].
 
