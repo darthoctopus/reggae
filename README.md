@@ -9,7 +9,7 @@ In full, the generative model accepts the following parameters:
 - $\Delta\Pi_0$, the notional period spacing of the g-mode cavity; this is related to the period spacing of any given $\ell$ as $\Delta\Pi_\ell = \Delta\Pi_0 / \sqrt{\ell(\ell + 1)}$.
 - $p_L$ and $p_D$, the two coupling parameters described above.
 - $\epsilon_g$, a g-mode phase offset.
-- $\log \left(\delta\omega_\mathrm{rot, g} / \mathrm{\mu Hz}\right)$ and $\log \left(\delta\omega_\mathrm{rot, g} / \mathrm{\mu Hz}\right)$ --- the implementation of the PSD model (below) accepts separate values of the core and envelope rotation rates. These are used to rotationally split the pure p- and g-modes separately before mode-coupling calculations are performed, thereby fully accounting for near-degeneracy asymmetric rotational splittings.
+- $\log \left(\delta\omega_\mathrm{rot, g} / \mathrm{\mu Hz}\right)$ and $\log \left(\delta\omega_\mathrm{rot, p} / \mathrm{\mu Hz}\right)$ --- the implementation of the PSD model (below) accepts separate values of the core (g-mode) and envelope (p-mode) rotational splittings. The pure p- and g-modes are split into multiplets separately before mode-coupling calculations are performed, thereby fully accounting for near-degeneracy asymmetric rotational splittings.
 - $\delta_{01}$, an additional phase offset for the dipole p-modes relative to the asymptotic solution found by pbjam.
 - $\alpha_g$, a curvature parameter for the g-modes (mirroring that of the p-modes in pbjam's asymptotic parameterisation).
 - $i$, the inclination of the rotational axis.
