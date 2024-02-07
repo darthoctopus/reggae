@@ -22,8 +22,7 @@ The above parameters generate a set of dipole-mode frequencies. These parameters
 
 In addition to a `DipoleStar` class (analogous to `star` in `pbjam`), we provide a GUI console for fine-tuning an initial guess to these asymptotic parameters. The primary use case for this is to refine the search space (i.e. reduce size of the prior volume) for more expensive computational methods, such as nested sampling. Simple tasks, such as simplex and genetic-algorithm optimisation, can also be performed from within the GUI.
 
-![Screenshot of the GUI in operation](screenshots/gui.png)
-
+![Screenshot of the GUI in operation, showing frequency and period-échelle power diagrams](screenshots/echelle.png)
 
 ## Contributors
 
