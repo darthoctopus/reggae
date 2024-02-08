@@ -3,17 +3,17 @@ title: "Reggae: A Parametric Tuner for PBJam, and a Visualization Tool for Red G
 authors:
   - name: J. M. Joel Ong
     orcid: 0000-0001-7664-648X
-    affiliation: [1, 2]
+    affiliation: "1, 2"
     corresponding: true
   - name: Martin B. Nielsen
     orcid: 0000-0001-9169-2599
-    affiliation: [3]
+    affiliation: 3
   - name: Emily J. Hatt
     orcid: 0000-0002-1389-1549
-    affiliation: [3]
+    affiliation: 3
   - name: Guy R. Davies
     orcid: 0000-0002-4290-7351
-    affiliation: [3]
+    affiliation: 3
 affiliations:
  - name: NASA Hubble Fellow
    index: 1
