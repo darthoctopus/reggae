@@ -28,8 +28,6 @@ class asymptotic():
             The mode width (identical for l=2 and l=0) (log10(muHz)).
         d02 : float
             The small separation (muHz).
-        hfac : float, optional
-            Ratio of the l=2 height to that of l=0 (unitless).
 
         Returns
         -------
@@ -65,8 +63,6 @@ class asymptotic():
 
         return h / (1.0 + 4.0/w**2*(self.f[self.sel] - nu0)**2)
 
-
-    # no jax on this
     def _get_nmax(self, dnu, numax, eps):
         """Compute radial order at numax.
 
@@ -80,7 +76,7 @@ class asymptotic():
         dnu : float
             Large separation of l=0 modes (muHz).
         eps : float
-            Epsilon phase term in asymptotic relation (muHz).
+            Epsilon phase term in asymptotic relation.
 
         Returns
         -------
@@ -104,26 +100,22 @@ class asymptotic():
         Parameters
         ----------
         nmax : float
-            Frequency of maximum power of the p-mode envelope
+            Frequency of maximum power of the p-mode envelope.
         norders : int
-            Total number of radial orders to consider
+            Total number of radial orders to consider.
 
         Returns
         -------
         enns : ndarray
                 Numpy array of norders radial orders (integers) around nu_max
                 (nmax).
-
         """
 
         below = jnp.floor(nmax - jnp.floor(self.norders/2)).astype(int)
 
         enns = jnp.arange(self.norders) + below
 
-        #above = jnp.floor(nmax + jnp.ceil(self.norders/2)).astype(int)
-
-        return enns #jnp.arange(below, above)
-
+        return enns
 
     @partial(jax.jit, static_argnums=(0,))
     def _P_envelope(self, nu, hmax, numax, width):
@@ -135,18 +127,18 @@ class asymptotic():
         Parameters
         ----------
         nu : float
-            Frequency (in muHz).
+            Frequency (muHz).
         hmax : float
-            Height of p-mode envelope (in SNR).
+            Height of p-mode envelope (SNR).
         numax : float
-            Frequency of maximum power of the p-mode envelope (in muHz).
+            Frequency of maximum power of the p-mode envelope (muHz).
         width : float
-            Width of the p-mode envelope (in muHz).
+            Width of the p-mode envelope (muHz).
 
         Returns
         -------
         h : float
-            Power at frequency nu (in SNR)
+            Power at frequency nu (SNR)
 
         """
 
@@ -156,8 +148,23 @@ class asymptotic():
 
 
     @partial(jax.jit, static_argnums=(0,))
-    def _get_freq_range(self, numax):
+    def _get_freq_range(self, numax):        
         """ Get frequency range around numax for model
+
+        Returns a boolean array corresponding to the frequency bins that span
+        the p-mode envelope.
+
+        The range is set to be -/+ Dnu from the lowest/heighest radial order.
+
+        Parameters
+        ----------
+        numax : float
+            Frequency of maximum power of the p-mode envelope (muHz).
+        
+        Returns
+        -------
+        idx : bool
+            Boolean array pick out the frequency range of the p-mode envelope.
         """
 
         dnu = self.dnuScale(numax)
@@ -168,7 +175,7 @@ class asymptotic():
 
         enns = self._get_n_p(nmax)
 
-        lfreq = (enns.min() + 1 + eps) * dnu
+        lfreq = (enns.min() - 1 + eps) * dnu # TODO Shouldn't this be - 1?
 
         ufreq = (enns.max() + 1 + eps) * dnu
 
@@ -196,7 +203,6 @@ class asymptotic():
         -------
         nu0s : ndarray
             Array of l=0 mode frequencies from the asymptotic relation (muHz).
-
         """
 
         nmax = self._get_nmax(dnu, numax, eps)
@@ -245,7 +251,6 @@ class asymptotic():
         -------
         model : ndarray
             spectrum model around the p-mode envelope
-
         """
 
         numax, dnu, eps, d02, alpha, hmax, env_width, mode_width = theta_asy
@@ -263,38 +268,39 @@ class asymptotic():
         return mod * self.eta[self.sel]
 
 
-    # No jax on this one
-    def __get_enns(self, nmax):
-        """Compute radial order numbers.
+    # TODO remove this? Doesn't look like it's used.
+    # # No jax on this one
+    # def __get_enns(self, nmax):
+    #     """Compute radial order numbers.
 
-        This is not jaxxed.
+    #     This is not jaxxed.
 
-        Get the enns that will be included in the asymptotic relation fit.
-        These are all integer.
+    #     Get the enns that will be included in the asymptotic relation fit.
+    #     These are all integer.
 
-        Parameters
-        ----------
-        nmax : float
-            Frequency of maximum power of the p-mode envelope
-        norders : int
-            Total number of radial orders to consider
+    #     Parameters
+    #     ----------
+    #     nmax : float
+    #         Frequency of maximum power of the p-mode envelope
+    #     norders : int
+    #         Total number of radial orders to consider
 
-        Returns
-        -------
-        enns : ndarray
-                Numpy array of norders radial orders (integers) around nu_max
-                (nmax).
+    #     Returns
+    #     -------
+    #     enns : ndarray
+    #             Numpy array of norders radial orders (integers) around nu_max
+    #             (nmax).
 
-        """
+    #     """
 
-        below = jnp.floor(nmax - jnp.floor(self.norders/2)).astype(int)
+    #     below = jnp.floor(nmax - jnp.floor(self.norders/2)).astype(int)
 
-        above = jnp.floor(nmax + jnp.ceil(self.norders/2)).astype(int)
+    #     above = jnp.floor(nmax + jnp.ceil(self.norders/2)).astype(int)
 
-        # Handling of single input (during fitting), or array input when evaluating
-        # the fit result
-        if type(below) != jnp.ndarray:
-            return jnp.arange(below, above)
-        else:
-            out = jnp.concatenate([jnp.arange(x, y) for x, y in zip(below, above)])
-            return out.reshape(-1, self.norders)
+    #     # Handling of single input (during fitting), or array input when evaluating
+    #     # the fit result
+    #     if type(below) != jnp.ndarray:
+    #         return jnp.arange(below, above)
+    #     else:
+    #         out = jnp.concatenate([jnp.arange(x, y) for x, y in zip(below, above)])
+    #         return out.reshape(-1, self.norders)
