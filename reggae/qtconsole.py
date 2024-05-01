@@ -40,6 +40,8 @@ plt.rcParams['backend'] = 'QtAgg'
 class ReggaeDebugWindow(QtWidgets.QMainWindow):
 
     def __init__(self, input=None, session=None):
+        """Start the QT console.
+        """
 
         qapp = QtWidgets.QApplication.instance()
         self.qapp = qapp
@@ -63,6 +65,8 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         qapp.exec()
 
     def init_ui(self):
+        """Initialize UI parameters
+        """
 
         self._main = QtWidgets.QSplitter()
         self.setCentralWidget(self._main)
@@ -432,6 +436,16 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         self.print("Initialised Reggae Console.")
 
     def tqdm(self, gen, total=None, **kwargs):
+        """Make a custom tqdm
+
+        Parameters
+        ----------
+        gen: generator obj
+            Generator object to loop through
+        total: int, optional
+            Total number of iterations in the generator. Default is None.
+        """
+
         if total is None:
             total = len(gen)
         for i, _ in enumerate(gen):
@@ -440,9 +454,9 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         self.progress.setValue(100)
 
     def sweep(self, i):
-        '''
+        """
         Parameter sweep over given bounds
-        '''
+        """
 
         field = FIELDS[i]
 
@@ -475,6 +489,8 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         # self.threadpool.start(worker)
 
     def recompute(self):
+        """Make the recompute button
+        """
         self.sync_state()
         θreg, norm = self.get_state()
         self.replot(θreg, norm, label='Manual')
@@ -509,11 +525,10 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
                         d[_].remove()
                         del d[_]
 
-
     def replot(self, θreg, norm, label='Manual'):
-        '''
-        regenerate echelle diagrams
-        '''
+        """Make button to regenerate echelle diagrams
+        """
+
         ax = self._ax['echelle']
         ylims = ax.get_ylim()
         dnu = 10**self.reggae.theta_asy.log_dnu
@@ -610,8 +625,15 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         ax.legend()
         ax.figure.canvas.draw()
 
-
     def load_pickle(self, description):
+        """Button to load pickle file
+        
+        Parameters
+        ----------
+        descripttion: str
+            Button tooltip.
+        """
+
         fname = QtWidgets.QFileDialog.getOpenFileName(self, description, ".", "Pickle files (*.pkl)")
         if fname[0] != '':
             with open(fname[0], 'rb') as f:
@@ -621,12 +643,28 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
             return None
 
     def write_pickle(self, obj, description):
+        """Button to write pickle file
+        
+        Parameters
+        ----------
+        descripttion: str
+            Button tooltip.
+        """
+        
         fname = QtWidgets.QFileDialog.getSaveFileName(self, description, ".", "Pickle files (*.pkl)")
         if fname[0] != '':
             with open(fname[0], 'wb') as f:
                 dill.dump(obj, f)
 
     def load_pbjam(self, *, pbjam=None):
+        """Button to load pickled PBjam star class instance
+        
+        Parameters
+        ----------
+        pbjam: obj
+            PBjam.star.star class instance.
+        """
+        
         if pbjam is None:
             pbjam = self.load_pickle("Open PBJam pickle file")
         if pbjam is not None:
@@ -638,6 +676,14 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
                 self.print("Invalid pickle contents")
 
     def load_reggae(self, *, reggae=None):
+        """Button to load pickled reggae star class instance
+        
+        Parameters
+        ----------
+        reggae: obj
+            reggae.dipolestar.dipolestar class instance.
+        """
+
         if reggae is None:
             reggae = self.load_pickle("Open Reggae pickle file")
         if reggae is not None:
@@ -650,8 +696,8 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
                 self.print("Invalid pickle contents")
 
     def load_reggae_actions(self):
-
-        # populate diagnostic plots
+        """Button to populate diagnostic plots
+        """
 
         self._curves = {}
 
@@ -704,16 +750,22 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         self.spinboxes['y1'].setValue(self.reggae.f[-1])
 
     def update_n_g(self):
+        """Update the list of g-mode radial orders.
+        """
         self.sync_state()
         self.reggae.l1model.n_g = self.reggae.select_n_g()
         self.n_g_lims['lower'].setValue(self.reggae.l1model.n_g[-1])
         self.n_g_lims['upper'].setValue(self.reggae.l1model.n_g[0])
 
     def get_ΔΠ(self):
+        """ Get the period spacing
+        """
         θ_reg = self.get_state()[0]
         return θ_reg.dPi0 / np.sqrt(2) * UNITS['DPI0']
 
     def get_q(self):
+        """Get the classical coupling strength
+        """
         θ_reg = self.get_state()[0]
         θ_asy = self.reggae.theta_asy
 
@@ -728,6 +780,8 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         return(α_to_q(α, Δν, ΔΠ1, νmax/1e6))
 
     def get_ν_p(self):
+        """Get the p-mode frequencies
+        """
         # from definition in reggae class
         
         theta_asy = self.reggae.theta_asy
@@ -742,6 +796,8 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         return nu_1
 
     def period_echelle_power_plot(self):
+        """Generate the period echelle plot
+        """
 
         ν_p = self.get_ν_p()
         ΔΠ1 = self.get_ΔΠ()
@@ -766,9 +822,9 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         ax.figure.canvas.draw()
 
     def sync_state(self):
-        '''
+        """
         Synchronise UI with state of reggae object
-        '''
+        """
 
         # 1. n_g bounds
 
@@ -795,6 +851,9 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
             self.reggae.l1model.nu_2 = None
 
     def load(self, *, session=None):
+        """Load PBjam session output
+        """
+
         if session is None:
             session = self.load_pickle("Load session variables from pickle file")
         if session is not None:
@@ -822,10 +881,26 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
                 self.print(f"{str(e)}")
 
     def print(self, text):
+        """Custom print function
+
+        Parameters
+        ----------
+        text: str
+            String to print.
+        """
+
         self.console.appendPlainText(f"{text}")
         self.statusBar().showMessage(f"{text}")
 
     def optimize(self, maxiter=1000):
+        """Start optimization
+        
+        Parameters
+        ----------
+        maxiter: int, optional
+            Maximum iterations to try optimization. Default is 10000.
+        """
+
         maxiter = self.spinboxes['opt_iters'].value()
         gen = self.tqdm(range(int(maxiter)))
 
@@ -839,6 +914,9 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         self.print("Complete.")
 
     def de(self):
+        """Button to start differential evolution.
+        """
+
         self.sync_state()
         self.print("Beginning Differential-Evolution Optimisation…")
         self.reggae.genetic_algorithm(solve_kwargs=dict(tqdm=self.tqdm), maxiters=self.spinboxes['de_iters'].value())
@@ -846,6 +924,8 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         self.print("Complete.")
 
     def newbounds(self):
+        """Set new bounds on the model parameters.
+        """
         self.sync_state()
         θ_reg, norm = self.get_state()
 
@@ -859,6 +939,9 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         self.sync_state()
 
     def dynesty(self):
+        """Initialize and run a Dynesty nested sampling run.
+        """
+
         self.sync_state()
         self.print("Beginning Dynesty run…")
         self.dynesty_result = self.reggae(dynamic=self.checkboxes['dynamic'].isChecked())
@@ -872,6 +955,8 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         return [tuple(self.bounds[f"{field}_{_}"].value() for _ in (0, 1)) for field in FIELDS]
 
     def dump(self):
+        """Store the Reggae session variables.
+        """
         spinboxes = {_: self.spinboxes[_].value() for _ in self.spinboxes}
         bounds = self.get_bounds()
         n_g = tuple(self.n_g_lims[_].value() for _ in ['lower', 'upper'])
@@ -881,9 +966,13 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
             }, 'Save session variables to pickle file')
 
     def dump_reggae(self):
+        """Pickle the reggae result.
+        """
         self.write_pickle(self.reggae, "Save reggae object to pickle file")
 
     def plot_MCMC(self):
+        """Plot the MCMC sampler results.
+        """
         sampler = getattr(self.reggae, "sampler", None)
         if sampler is None:
             return
@@ -899,6 +988,9 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         ...
 
     def reset(self):
+        """Reset the UI to starting conditions.
+        """
+
         for i, _ in enumerate(FIELDS):
             self.spinboxes[_].setValue(1)
             for j in (0, 1):
@@ -916,23 +1008,29 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
 
 
 class Signals(QtCore.QObject):
+    """Signal handler
+    """
     error = QtCore.pyqtSignal(tuple)
     finished = QtCore.pyqtSignal()
     result = QtCore.pyqtSignal(object)
 
 class Worker(QtCore.QRunnable):
-    '''
+    """
     Worker thread
 
     Inherits from QRunnable to handler worker thread setup, signals and wrap-up.
 
-    :param callback: The function callback to run on this worker thread. Supplied args and
-                     kwargs will be passed through to the runner.
-    :type callback: function
-    :param args: Arguments to pass to the callback function
-    :param kwargs: Keywords to pass to the callback function
+    Parameters
+    ----------
+    callback: callable 
+        The function callback to run on this worker thread. Supplied args and
+        kwargs will be passed through to the runner.
+    args: list
+        Arguments to pass to the callback function
+    kwargs:cdict 
+        Keywords to pass to the callback function
 
-    '''
+    """
 
     def __init__(self, fn, *args, **kwargs):
         super(Worker, self).__init__()
@@ -944,9 +1042,9 @@ class Worker(QtCore.QRunnable):
 
     @QtCore.pyqtSlot()
     def run(self):
-        '''
+        """
         Initialise the runner function with passed args, kwargs.
-        '''
+        """
 
         # Retrieve args/kwargs here; and fire processing using them
         try:
