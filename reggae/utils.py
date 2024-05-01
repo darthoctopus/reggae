@@ -4,19 +4,25 @@ import jax.numpy as jnp
 import jax.scipy.special as jsp
 import jax
 import numpy as np
-import lightkurve as lk
 import os
 jax.config.update('jax_enable_x64', True)
 
 
 def readBkgFits(ID):
-    """ Read background samples for bog prior
+    """ Read background samples during prior.
     
     Read in the previosly fit background model parameters to use as a prior
-    on the bog sampling. 
+    during sampling. 
 
-    This will be removed once the background parameters are put into the prior
-    and become part of the DR.
+    Paramaters
+    ----------
+    ID : str
+        Target identifier
+
+    Returns
+    -------
+    out : dict
+        Dictionary containing parameters for three harvey laws.
     """  
     
     fname = os.path.join(*['Examples', ID+'_bkg_samples.npz'])
@@ -43,10 +49,12 @@ def readBkgFits(ID):
     return out
 
 
-
-# Jaxxed
 class jaxInterp1D():
-    """ Replacement for scipy.interpolate.interp1d in jax"""
+    """ Replacement for scipy.interpolate.interp1d in jax
+
+    This is used to initialize a callable object for interpolating.
+    
+    """
 
     def __init__(self, xp, fp, left=None, right=None, period=None):
         self.xp = xp
@@ -57,7 +65,19 @@ class jaxInterp1D():
 
     @partial(jax.jit, static_argnums=(0,))
     def __call__(self, x):
+        """ Evalute the interpolant on given values
 
+        Parameters
+        ----------
+        x : jnp.array
+            jax array of points to evaluate the interpolant at.
+        
+        Returns
+        -------
+        interp : jnp.array
+            The interpolated values.
+
+        """
         return jnp.interp(x, self.xp, self.fp, self.left, self.right, self.period)
 
 
@@ -91,7 +111,7 @@ class scalingRelations():
         Parameters
         ----------
         nu : float, array
-            Value(s) at which to compute dnu, assuming nu corresponds to numax.
+            Value(s) at which to compute dnu, assuming nu corresponds to numax. (muHz)
         gamma : float
             Scaling factor to apply.
         p : array-like, optional
@@ -110,30 +130,23 @@ class scalingRelations():
     def envWidth(self, numax):
         """ Scaling relation for the envelope width
 
-        Computest he full width at half maximum of the p-mode envelope based
-        on numax and Teff (optional).
+        Computes the the estimated full width at half maximum of the p-mode 
+        envelope based on numax.
 
         Parameters
         ----------
         numax : float
             Frequency of maximum power of the p-mode envelope.
-        Teff : float, optional
-            Effective surface temperature of the star.
-        Teff0 : float, optional
-            Solar effective temperature in K. Default is 5777 K.
-
+        
         Returns
         -------
         width : float
             Envelope width in muHz
         """
 
-        width = 0.66*numax**0.88 # Mosser et al. 201??
+        width = 0.66*numax**0.88
 
         return width
-
-# Jaxxed
-
 
 @jax.jit
 def to_log10(x, xerr):
@@ -156,8 +169,6 @@ def to_log10(x, xerr):
 
     """
 
-
-
     L = jax.lax.cond(xerr > 0,
                      lambda A: jnp.array([jnp.log10(A[0]), A[1]/A[0]/jnp.log(10.0)]),
                      lambda A: A,
@@ -165,14 +176,16 @@ def to_log10(x, xerr):
 
     return L
 
-# Jaxxed
 class normal():
 
     def __init__(self, **kwargs):
         """ normal distribution class
 
-        Create instances a probability density which follows the normal
+        Create instances of a probability density which follows a normal
         distribution.
+
+        This should replicate the scipy.stats.norm function but with jax as
+        the numerical library.
 
         Parameters
         ----------
@@ -193,14 +206,12 @@ class normal():
 
         self.fac = -0.5 / self.sigma**2
 
-
-
     @partial(jax.jit, static_argnums=(0,))
     def pdf(self, x, norm=True):
-        """ Return PDF
+        """ Evaluate the probability density function
 
-        Returns the normal distribution at x. The distribution is normalized to
-        unit integral by default so that it may be used as a PDF.
+        Returns the probability density of the normal distribution at x. The distribution 
+        is normalized to unit integral by default so that it may be used as a PDF.
 
         In some cases the normalization is not necessary, and since it's
         marginally slower it may as well be left out.
@@ -208,33 +219,29 @@ class normal():
         Parameters
         ----------
         x : array
-            Input support for the probability density.
-        norm : bool, optional
-            If true, returns the normalized normal distribution. The default is
-            True.
+            Support for the probability density.
 
         Returns
         -------
         y : array
-            The value of the normal distribution at x.
-
+            The probability density at x.
         """
+
         y = jnp.exp( self.fac * (x - self.mu)**2)
 
         Y = jax.lax.cond(norm,
                          lambda y: y * self.norm,
-                         lambda y: y ,
+                         lambda y: y,
                          y)
 
         return Y
 
     @partial(jax.jit, static_argnums=(0,))
     def logpdf(self, x, norm=True):
-        """ Return log-PDF
+        """ Evaluate the log-probability density function
 
-        Returns the log of the normal distribution at x. The distribution is
-        normalized to unit integral (in linear units) by default so that it
-        may be used as a PDF.
+        Returns the probability density of the normal distribution at x. The distribution 
+        is normalized to unit integral by default so that it may be used as a PDF.
 
         In some cases the normalization is not necessary, and since it's
         marginally slower it may as well be left out.
@@ -242,15 +249,12 @@ class normal():
         Parameters
         ----------
         x : array
-            Input support for the probability density.
-        norm : bool, optional
-            If true, returns the normalized normal distribution. The default is
-            True.
+            Support for the probability density.
 
         Returns
         -------
         y : array
-            The value of the logarithm of the normal distribution at x.
+            The probability density at x.
         """
 
         y = self.fac * (x - self.mu)**2
@@ -264,6 +268,20 @@ class normal():
 
     @partial(jax.jit, static_argnums=(0,))
     def cdf(self, x):
+        """ Evaluate the cummulative distribution function
+
+        Returns cummulative probability density of the normal distribution at x. 
+
+        Parameters
+        ----------
+        x : array
+            Support for the probability density.
+
+        Returns
+        -------
+        y : array
+            The probability density at x.
+        """
 
         y = 0.5 * (1 + jsp.erf((x-self.mu)/(jnp.sqrt(2)*self.sigma)))
 
@@ -271,7 +289,21 @@ class normal():
 
     @partial(jax.jit, static_argnums=(0,))
     def ppf(self, y):
+        """ Evaluate the quantile function
 
+        Returns support corresponding to a given quantile between 0 and 1 for the normal distribution. 
+
+        Parameters
+        ----------
+        y : array
+            Quantile value.
+
+        Returns
+        -------
+        x : array
+            The support for the PDF corresponding to quantile value y.
+        """        
+        
         x = self.mu + self.sigma*jnp.sqrt(2)*jsp.erfinv(2*y-1)
 
         return x
@@ -281,6 +313,22 @@ class normal():
 class uniform():
 
     def __init__(self, **kwargs):
+        """ uniform distribution class
+
+        Create instances of a probability density which follows a uniform
+        distribution.
+
+        This should replicate the scipy.stats.uniform function but with jax as
+        the numerical library.
+
+        Parameters
+        ----------
+        loc : float
+            Lower bound for the uniform distribution.
+        scale : float
+            Width of the uniform distribution.
+        """
+
         allowed_keys = {'loc', 'scale'}
 
         self.__dict__.update((k, v) for k, v in kwargs.items() if k in allowed_keys)
@@ -292,6 +340,21 @@ class uniform():
         self.mu = 0.5 * (self.a + self.b)
 
     def pdf(self, x):
+        """ Evaluate the probability density function
+
+        Returns the probability density of the uniform distribution at x. The distribution 
+        is normalized to unit integral by default so that it may be used as a PDF.
+
+        Parameters
+        ----------
+        x : array
+            Support for the probability density.
+
+        Returns
+        -------
+        y : array
+            The probability density at x.
+        """
 
         x = jnp.array(x)
 
@@ -313,6 +376,24 @@ class uniform():
         return y
 
     def logpdf(self, x):
+        """ Evaluate the log-probability density function
+
+        Returns the probability density of the uniform distribution at x. The distribution 
+        is normalized to unit integral by default so that it may be used as a PDF.
+
+        In some cases the normalization is not necessary, and since it's
+        marginally slower it may as well be left out.
+
+        Parameters
+        ----------
+        x : array
+            Support for the probability density.
+
+        Returns
+        -------
+        y : array
+            The probability density at x.
+        """
 
         x = jnp.array(x)
 
@@ -334,7 +415,21 @@ class uniform():
         return y
 
     def cdf(self, x):
+        """ Evaluate the cummulative distribution function
 
+        Returns cummulative probability density of the uniform distribution at x. 
+
+        Parameters
+        ----------
+        x : array
+            Support for the probability density.
+
+        Returns
+        -------
+        y : array
+            The probability density at x.
+        """
+        
         x = jnp.array(x)
 
         if isinstance(x, (jnp.ndarray, )):
@@ -361,11 +456,22 @@ class uniform():
 
         return y
 
-    #@partial(jax.jit, static_argnums=(0,))
     def ppf(self, y):
+        """ Evaluate the quantile function
 
-        #y = jnp.array(y)
+        Returns support corresponding to a given quantile between 0 and 1 for the uniform distribution. 
 
+        Parameters
+        ----------
+        y : array
+            Quantile value.
+
+        Returns
+        -------
+        x : array
+            The support for the PDF corresponding to quantile value y.
+        """        
+    
         x = y * (self.b - self.a) + self.a
 
         return x
@@ -536,6 +642,20 @@ class beta():
             return y
 
     def cdf(self, x):
+        """ Evaluate the cummulative distribution function
+
+        Returns cummulative probability density of the uniform distribution at x. 
+
+        Parameters
+        ----------
+        x : array
+            Support for the probability density.
+
+        Returns
+        -------
+        y : array
+            The probability density at x.
+        """
 
         _x = self._transformx(x)
 
@@ -548,15 +668,30 @@ class beta():
         return y
 
     def ppf(self, y):
+        """ Evaluate the quantile function
 
-        _x = betaincinv(self.a, self.b, y)
+        Returns support corresponding to a given quantile between 0 and 1 for the beta distribution. 
+
+        Parameters
+        ----------
+        y : array
+            Quantile value.
+
+        Returns
+        -------
+        x : array
+            The support for the PDF corresponding to quantile value y.
+        """
+        _x = _betaincinv(self.a, self.b, y)
 
         x = self._inverse_transform(_x)
 
         return x
 
 @jax.jit
-def update_x(x, a, b, p, a1, b1, afac):
+def _update_x(x, a, b, p, a1, b1, afac):
+    """ Helper function for evaluating the beta distribution quantile function
+    """
     err = jsp.betainc(a, b, x) - p
     t = jnp.exp(a1 * jnp.log(x) + b1 * jnp.log(1.0 - x) + afac)
     u = err/t
@@ -569,7 +704,9 @@ def update_x(x, a, b, p, a1, b1, afac):
     return x, t
 
 @jax.jit
-def func_1(a, b, p):
+def _func_1(a, b, p):
+    """ Helper function for evaluating the beta distribution quantile function
+    """
     pp = jnp.where(p < .5, p, 1. - p)
     t = jnp.sqrt(-2. * jnp.log(pp))
     x = (2.30753 + t * 0.27061) / (1.0 + t * (0.99229 + t * 0.04481)) - t
@@ -580,7 +717,9 @@ def func_1(a, b, p):
     return a / (a + b * jnp.exp(2.0 * w))
 
 @jax.jit
-def func_2(a, b, p):
+def _func_2(a, b, p):
+    """ Helper function for evaluating the beta distribution quantile function
+    """
     lna = jnp.log(a / (a + b))
     lnb = jnp.log(b / (a + b))
     t = jnp.exp(a * lna) / a
@@ -590,11 +729,15 @@ def func_2(a, b, p):
     return jnp.where(p < t/w, jnp.power(a * w * p, 1.0 / a), 1. - jnp.power(b *w * (1.0 - p), 1.0/b))
 
 @jax.jit
-def compute_x(p, a, b):
-    return jnp.where(jnp.logical_and(a >= 1.0, b >= 1.0), func_1(a, b, p), func_2(a, b, p))
+def _compute_x(p, a, b):
+    """ Helper function for evaluating the beta distribution quantile function
+    """
+    return jnp.where(jnp.logical_and(a >= 1.0, b >= 1.0), _func_1(a, b, p), _func_2(a, b, p))
 
 @jax.jit
-def betaincinv(a, b, p):
+def _betaincinv(a, b, p):
+    """ Helper function for evaluating the beta distribution quantile function
+    """
     a1 = a - 1.0
     b1 = b - 1.0
 
@@ -602,12 +745,12 @@ def betaincinv(a, b, p):
 
     p = jnp.clip(p, a_min=0., a_max=1.)
 
-    x = jnp.where(jnp.logical_or(p <= 0.0, p >= 1.), p, compute_x(p, a, b))
+    x = jnp.where(jnp.logical_or(p <= 0.0, p >= 1.), p, _compute_x(p, a, b))
 
     afac = - jsp.betaln(a, b)
     stop  = jnp.logical_or(x == 0.0, x == 1.0)
     for i in range(10):
-        x_new, t = update_x(x, a, b, p, a1, b1, afac)
+        x_new, t = _update_x(x, a, b, p, a1, b1, afac)
         x = jnp.where(stop, x, x_new)
         stop = jnp.where(jnp.logical_or(jnp.abs(t) < ERROR * x, stop), True, False)
 
