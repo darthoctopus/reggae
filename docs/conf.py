@@ -20,6 +20,14 @@ extensions = [
     'myst_parser'
 ]
 
+myst_enable_extensions = [
+    "amsmath",
+    "colon_fence",
+    "dollarmath",
+    "smartquotes",
+    "strikethrough",
+]
+
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
