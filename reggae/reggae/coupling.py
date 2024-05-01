@@ -3,10 +3,10 @@
 ## Author: Joel Ong <joel.ong@yale.edu>
 ## Yale University Dept. of Astronomy
 
-'''
+"""
 Manipulation of the coupling matrices. Directly lifted from the utils.coupling
 module of Joel's gitlab repository.
-'''
+"""
 
 import numpy as np
 import scipy.linalg as la
@@ -15,12 +15,12 @@ from .poly2d import wrap_polyval2d
 ν_to_ω = 2 * np.pi / 1e6
 
 def zip_n(n_p, n_g, ν_p, ν_g):
-    '''
+    """
     Produce a set of n_p and n_g so that the usual Eckert-Scuflaire-Osaki quantity
     n_p - n_g behaves as expected. This however does NOT reproduce the correct n_p or n_g
     separately! In order to do this we have to make use of the mixing coefficients
     ζ somehow.
-    '''
+    """
 
     q = np.argsort(ν_g)
     ν_g = ν_g[q]
@@ -56,7 +56,7 @@ def zip_n(n_p, n_g, ν_p, ν_g):
     return out_n_p.astype(int), out_n_g.astype(int)
 
 def new_modes(A, D, N_π, *, l=1, ξr=None, ξh=None, M=None):
-    r'''
+    r"""
     Given the matrices A and D such that we have eigenvectors
 
     A cᵢ = -ωᵢ² D cᵢ,
@@ -70,7 +70,24 @@ def new_modes(A, D, N_π, *, l=1, ξr=None, ξh=None, M=None):
 
     Note that this differs by 4π from some other definitions; this is for consistency
     with GYRE. Overall constant factors shouldn't really matter in any case.
-    '''
+
+    Parameters
+    ----------
+    A: array-like
+        Coupling matrix.
+    D: array-like
+        Coupling matrix.
+    N_π: int
+        Number of p-modes 
+    l: int, optional.
+        Angular degree, default is 1.
+    ξr: array-like
+        Radial component of the eigenfunctions, default is None.
+    ξh: array-like
+        Horizontal component of the eigenfunctions, default is None.
+    M: float
+        Stellar mass, default is None.
+    """
 
     Λ, U = la.eigh(A, D)
 
@@ -91,19 +108,33 @@ def new_modes(A, D, N_π, *, l=1, ξr=None, ξh=None, M=None):
     return np.sqrt(new_ω2)[m] / ν_to_ω, ζ[m], E[m] if E is not None else E
 
 def generate_matrices(n_p, n_g, ν_p, ν_g, p_L, p_D):
-    '''
+    """
     Generate a coupling matrix given a set of p- and g-mode frequencies,
     their radial orders n_p and n_g, and some polynomial coefficients for the
     scaled dimensionless coupling strengths and overlap integrals.
 
-    Inputs:
-    n_p: ndarray containing π-mode radial orders, of length N_π
-    n_g: ndarray containing γ-mode radial orders, of length N_γ
-    ν_p: ndarray containing p-mode frequencies, of length N_π
-    ν_g: ndarray containing g-mode frequencies, of length N_γ
-    p_L: parameter vector describing 2D polynomial coefficients for coupling strengths
-    p_D: parameter vector describing 2D polynomial coefficients for overlap integrals
-    '''
+    Parameters:
+    -----------
+    n_p: array-like 
+        Contains π-mode radial orders, of length N_π.
+    n_g: array-like
+        Contains γ-mode radial orders, of length N_γ.
+    ν_p: array-like
+        Contains p-mode frequencies, of length N_π.
+    ν_g: array-like
+        Contains g-mode frequencies, of length N_γ.
+    p_L: array-like
+        Parameter vector describing 2D polynomial coefficients for coupling strengths.
+    p_D: array-like
+        parameter vector describing 2D polynomial coefficients for overlap integrals.
+
+    Returns
+    -------
+    L : array-like
+        Coupling matrix of shape N_π+N_γ.
+    D : array-like
+        Coupling matrix of shape N_π+N_γ.
+    """
 
     assert len(n_p) == len(ν_p) and len(n_g) == len(ν_g)
     N_π = len(n_p)
