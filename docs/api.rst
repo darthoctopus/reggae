@@ -14,3 +14,4 @@ Modules in Reggae
 
    dipolestar
    reggae
+   theta

@@ -20,6 +20,10 @@ UNITS = {
 }
 
 class reggae():
+    '''
+    jax'd numerical routines for generation of dipole mixed modes
+    and a PSD model.
+    '''
 
     nu_to_omega = 2 * jnp.pi / 1e6
 

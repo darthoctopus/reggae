@@ -1,3 +1,11 @@
+'''
+Rather than pass around raw numpy arrays, Reggae uses
+dataclass objects to characterise the various θ parameters
+entering into the model. One is for the background & asymptotic
+p-mode parameters (θ_asy) inherited from pbjam, and one is for
+the dipole modes (θ_reggae) which Reggae as a tool is intended
+to assist in fitting.
+'''
 from .utils import beta, normal
 from dataclasses import dataclass, astuple
 import jax.numpy as jnp

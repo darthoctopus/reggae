@@ -19,6 +19,10 @@ from .psdmodel import PSDModel
 from .reggae import reggae
 
 class DipoleStar:
+    '''
+    Generalisation of pbjam.star to assist in determination of dipole mixed-mode
+    parameters.
+    '''
 
     labels=[r'$\Delta\Pi_0$ (relative)', '$L_0$', '$D_0$', r'$\epsilon_g$',
                 r'$\log \omega_\mathrm{core}/\mu$Hz', r'$\delta\epsilon_{p1}$',

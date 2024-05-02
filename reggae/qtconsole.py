@@ -38,6 +38,20 @@ STYLE = {
 plt.rcParams['backend'] = 'QtAgg'
 
 class ReggaeDebugWindow(QtWidgets.QMainWindow):
+    '''
+    GUI tuning tool for dipole mixed-mode parameters.
+    There are two ways we recommend launching this:
+
+    1. Running reggae as a raw python module:
+    `python -m reggae`
+    This will instantiate an instance of the GUI with no
+    arguments.
+
+    2. Instantiating a class by passing an existing `DipoleStar`
+    or `pbjam.star` instance as positional argument. This is equivalent
+    to launching an empty GUI, and using either of the import buttons
+    in the sidebar.
+    '''
 
     def __init__(self, input=None, session=None):
         """Start the QT console.
