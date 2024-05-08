@@ -20,10 +20,10 @@ UNITS = {
 }
 
 class reggae():
-    '''
+    """
     jax'd numerical routines for generation of dipole mixed modes
-    and a PSD model.
-    '''
+    and a PSD model. 
+    """
 
     nu_to_omega = 2 * jnp.pi / 1e6
 
@@ -33,9 +33,27 @@ class reggae():
     @staticmethod
     @jax.jit
     def l1model(nu, nu1s, zeta, dnu, *, lw=None, amps=None):
-        '''
-        Generate a fake power spectrum from a set of modes (nu1s)
-        '''
+        """
+        Generate a power spectrum model from a set of modes (nu1s).
+
+        The model consists of a sequence of Lorentizan profiles.
+
+        Parmeters
+        ---------
+        nu: jnp.array
+            Frequency bins on which to compute the spectrum model.
+        nu1s: jnp.array
+            l=1 mode frequencies.
+        zeta: jnp.array
+            Mixing degree for the modes. 0 is completely p-like, 1 is 
+            completely g-like.
+        dnu: float
+            Large separation for the star.
+        lw: jnp.array, optional
+            Linewidths for the modes. Default is None. 
+        amps: jnp.array, optional
+            Mode amplitudes. Default is None.
+        """
 
         Hs = jnp.maximum(0, 1. - zeta)
         if amps is not None:
@@ -48,6 +66,7 @@ class reggae():
 
         for i in range(len(nu1s)):
             lorentzians += reggae._lor(nu, nu1s[i], Hs[i], modewidth1s[i])
+
         return lorentzians
 
     @staticmethod
@@ -118,12 +137,34 @@ class reggae():
     @staticmethod
     @jax.jit
     def asymptotic_nu_g(n_g, dPi0, max_N2, eps_g, alpha=0, numax=0., l=1):
-        '''
+        """
         Asymptotic relation for the g-mode frequencies
         in terms of a fundamental period offset (defined by the
         maximum Brunt-Vaisala frequency), the asymptotic g-mode period
         spacing, the g-mode phase offset, and an optional curvature term.
-        '''
+
+        Parameters
+        ----------
+        n_g: array-like
+            Array of radial orders at which the g-mode frequencies are computed
+        dPi0: float
+            The period spacing of the g-modes.
+        max_N2: float
+            The maximum of the Brunt-Vaisala frequency, used to define the fundamental
+            period offset.
+        eps_g: float 
+            Phase offset for the g-modes.
+        alpha: float, optional
+            Curvature factor for the g-mode periods. Default is 0.
+        numax: float, optional 
+            numax of the envelope. Default is 0
+        l=1: int, optional
+            Angular degree of the g-modes. Default is 1.
+
+        returns
+        -------
+    
+        """
 
         nu_to_omega = 2 * jnp.pi / 1e6
 
@@ -145,9 +186,23 @@ class reggae():
     @staticmethod
     @jax.jit
     def wrap_polyval2d(x, y, p):
-        '''
+        """
         Evaluate 2D polynomial, broadcasting shapes of x and y where appropriate.
-        '''
+
+        Parameters
+        ----------
+        x: array-like
+            x-coordinate for 2D polynomial.
+        y: array-like
+            y-coordinate for 2D polynomial.
+        p: array-like
+            Polynomial coefficients.
+            
+        Returns
+        -------
+        o: array-like
+            Result of evaluating the 2D polynomial.
+        """
 
         xx = (x + 0 * y)
 
@@ -163,9 +218,20 @@ class reggae():
     @staticmethod
     @jax.jit
     def poly_params_2d(p):
-        '''
+        """
         Turn a parameter vector into an upper triangular coefficient matrix.
-        '''
+
+        Parameters
+        ----------
+        p: array-like
+            1D array of polynomial coefficients to be broadcast to upper triangular matrix.
+
+        Returns
+        -------
+        C: array-like
+            2D array consisting of a upper triangular matrix with entries corresponding to p.
+
+        """
 
         # is len(p) a triangular number?
         # n = int((lib.sqrt(1 + 8 * len(p)) - 1) / 2)
@@ -195,9 +261,13 @@ class reggae():
     @staticmethod
     @jax.jit
     def polyval2d(x, y, c, increasing=True):
+
         m, n = c.shape
+        
         X = jnp.vander(x, m, increasing=increasing)
+        
         Y = jnp.vander(y, n, increasing=increasing)
+        
         return jnp.sum(X[:, :, None] * Y[:, None,: ]*c, axis=(2, 1))
 
     @staticmethod
@@ -236,32 +306,67 @@ class reggae():
 
     @staticmethod
     @jax.jit
-    def getl1(n_g, nu0_p, numax, dnu, d02, alpha_p, nmax, n_p,
-              d01, dPi0, p_L, p_D, epsilon_g, alpha_g, *, dnu_p=0, dnu_g=0):
+    def getl1(n_g, nu0_p, numax, dnu, d02, n_p, d01, dPi0, p_L, p_D, 
+              epsilon_g, alpha_g, *, dnu_p=0, dnu_g=0):
+        """Compute the l=1 mode frequencies using the matrix formalism
+
+        Parameters
+        ----------
+        nu0_p: array-like
+            Array of l=0 mode frequencies
+        numax: float 
+            numax for the star.
+        dnu: float 
+            Large separation for the star.
+        d02: float 
+            Small separation for the star.
+        n_p: array-like 
+            Array of radial orders for the p-modes
+        d01: float 
+            The l=10 separation.
+        dPi0: float 
+            Period spacing.
+        p_L: float 
+            Coupling coefficient.
+        p_D: float 
+            Coupling coefficient
+        epsilon_g: float 
+            The asymptotic g-mode phase offset.
+        alpha_g: float
+            The asymptotic g-mode curvature.
+        dnu_p: float, optional
+            Small frequency offset for the p-modes. Default is 0.
+        dnu_g: float, optional
+            Small frequency offset for the g-mode. Default is 0.
+
+        Returns
+        -------
+        nu1: jnp.array
+            l=1 mode frequencies.
+        zeta: jnp.array
+            Mixing degree of the modes.
+        """
 
         nu1_p = nu0_p + dnu / 2 - d02/3 + d01 * dnu + dnu_p # TODO better way to estimate p-like l1's??
 
         deltaPi0 = UNITS['DPI0'] * dPi0 # in inverse μHz
 
         p_L = jnp.array([UNITS['P_L'] * p_L])
+
         p_D = jnp.array([UNITS['P_D'] * p_D])
-
-        epsilon_g = epsilon_g
-
-        alpha_g = alpha_g
 
         nu_g = reggae.asymptotic_nu_g(n_g, deltaPi0, jnp.inf, epsilon_g, numax=numax, alpha=alpha_g) + dnu_g
 
         L, D = reggae.generate_matrices(n_p, n_g, nu1_p, nu_g, p_L, p_D)
 
-        nu, zeta, E = reggae.new_modes(L, D, n_p)
+        nu1, zeta, E = reggae.new_modes(L, D, n_p)
 
-        return nu, zeta
+        return nu1, zeta
 
     @staticmethod
     @jax.jit
     def new_modes(A, D, n_p, l=1, ξr=None, ξh=None, M=None):
-        r'''
+        r"""
         Given the matrices A and D such that we have eigenvectors
 
         A cᵢ = -ωᵢ² D cᵢ,
@@ -275,7 +380,7 @@ class reggae():
 
         Note that this differs by 4π from some other definitions; this is for consistency
         with GYRE. Overall constant factors shouldn't really matter in any case.
-        '''
+        """
 
         Λ, U = reggae.eigh(A, D)
 
@@ -303,21 +408,25 @@ class reggae():
     @staticmethod
     @jax.jit
     def _T(x):
+        """Helper function of eigh"""
         return jnp.swapaxes(x, -1, -2)
 
     @staticmethod
     @jax.jit
     def _H(x):
+        """Helper function of eigh"""
         return jnp.conj(reggae._T(x))
 
     @staticmethod
     @jax.jit
     def symmetrize(x):
+        """Helper function of eigh"""
         return (x + reggae._H(x)) / 2
 
     @staticmethod
     @jax.jit
     def standardize_angle(w, b):
+        """Helper function of eigh"""
         if jnp.isrealobj(w):
             return w * jnp.sign(w[0, :])
 
@@ -405,7 +514,11 @@ class reggae():
 
     @staticmethod
     def select_n_g(numax, freq_lims, dPi0_lims, eps_lims, max_N2=jnp.inf):
+        """ Select relevant g-mode radial orders.
 
+        Based on prior estimates for period spacing and g-mode phase offset, computes
+        the g-mode radial orders that are expected to be relevant 
+        """
         init_n_g = np.arange(10000)[::-1] + 1
 
         min_n_g = init_n_g.max()

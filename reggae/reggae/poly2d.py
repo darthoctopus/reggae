@@ -95,8 +95,11 @@ def polyfit2d(x, y, z, n_max, e_z=None):
         Maximum number of radial orders.
     e_z: array-like
         Array to errors on z. 
+    
     Returns
     -------
+    j: array-like
+        2D polynomial fit parameters
     """
 
     p = []

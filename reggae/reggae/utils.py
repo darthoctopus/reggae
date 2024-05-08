@@ -24,7 +24,7 @@ def asymptotic_ν_g(n_g, ΔΠ0, max_N2, ε_g, α=0, ν_max=0, l=1):
     n_g: array-like
         Array of radial orders at which the g-mode frequencies are computed
     ΔΠ0: float
-        The period spacing of the g-modes
+        The period spacing of the g-modes.
     max_N2: float
         The maximum of the Brunt-Vaisala frequency, used to define the fundamental
         period offset.
