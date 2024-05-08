@@ -6,4 +6,3 @@ astropy
 dynesty
 dill
 jax
-zeta @ git+https://gitlab.com/darthoctopus/zeta@master
