@@ -1,5 +1,11 @@
 # Reggae: Dipole modes from `pbjam`
 
+This is a diagnostic tool for generating optimal parameters describing dipole mixed modes under the nonasymptotic matrix-coupling scheme of Ong & Basu (2020) used in the second release of `pbjam`.
+
+Since the primary samples of the PLATO mission consist mainly of main-sequence and subgiant stars, `pbjam` implements a parameterisation of dipole modes suitable to these stars, outside the red-giant "asymptotic" regime. Reggae assists in the task of manually fine-tuning the dipole-mode model, and checking the quality of both our initial guesses and fitted solutions. An important part of this tuning is visual assessment of how well the data matches posterior samples for these parameters. Such asteroseismic visualisations often use the échelle power diagram near $\nu_{\mathrm{max}}$ as a diagnostic tool, with clearly-defined ridges emerging on this diagram for p-modes, such as in main-sequence stars.
+
+We found Reggae very helpful both for these tuning and visualisation tasks, and also as a didactic aid to understanding the dipole mixed-mode parameters. As such, we release it publicly in advance of the second `PBjam` version, as we believe the community will benefit from access to such a visualisation tool. This will also assist future users of `PBjam` in devising ad-hoc prior constraints on the mixed-mode parameters, should they wish not to rely on the prior included with it.
+
 ## Generative model for mode frequencies
 
 We implement a generative model for dipole gravitoacoustic mixed modes using the parameterisation of Ong & Basu (2020). At present, the frequency-dependent coupling strength is described with two parameters (one for each of the two matrices entering into the parameterisation), with a conversion to the asymptotic $q$ provided by an expression in Ong & Gehan (2023). This expression is in turn used to generate stretched echelle power plots for diagnostic purposes.
