@@ -9,7 +9,7 @@ Reggae is intended to be operated primarily through its GUI, although many GUI a
 
 As a diagnostic utility, Reggae exposes a large amount of information to the viewer. This information is broken down in to several panels, which are switchable with the tab bar on the left side of the screen.
 
-:::{figure} ../screenshots/ps.png
+:::{figure} images/ps.png
 :alt: Left Panel 1: Power Spectrum
 
 Left Panel 1: Power Spectrum
@@ -19,7 +19,13 @@ The first panel shows the power spectrum. Like PBJam, Reggae uses the so-called 
 
 Later steps in the fitting procedure produce PSD models as well. These are shown with various coloured curves.
 
-:::{figure} ../screenshots/echelle.png
+:::{figure} images/χ2.png
+:alt: Left Panel 2: $\chi^2$ Landscape
+
+Left Panel 2: $\chi^2$ Landscape
+:::
+
+:::{figure} images/echelle.png
 :alt: Left Panel 3: Echelle Diagrams
 
 Left Panel 3: Echelle Diagrams
@@ -31,12 +37,25 @@ Reggae's mode identification step turns a small number of parameters — such as
 
 For the period-echelle power diagram in particular, the horizontal coordinate is further "stretched" through the use of the coordinate transform described in Mosser et al. 2012, 2015, 2017, 2018; Ong & Gehan 2023. In summary: in the asymptotic regime, mixed modes satisfy an eigenvalue equation parameterised by a single coupling strength $q$. If ansatz values of $q$, $\Delta\Pi$, and the pure p-mode frequencies are supplied, this allows the pure g-mode frequencies to be inferred from the mixed modes analytically. More generally, this specifies a coordinate transformation in the period coordinate mapping the mixed mode frequencies to the g-mode frequencies. As such, when applied to the period-echelle power diagram, it will map avoided crossings to vertical ridges, if the supplied values of $q$, $\Delta\Pi$, and the p-mode frequencies are accurate.
 
+:::{figure} images/posterior.png
+:alt: Left Panel 4: Posterior Distributions
+
+Left Panel 4: Posterior Distributions
+:::
+
 ## Tuning Parameters
 
 Reggae is intended to permit the user to derive estimates of parameters describing the dipole modes. As such, its GUI provides various ways by which one might either manually fine-tune a guess at these parameters, or else arrive at point esimates or posterior distributions through automated optimisation or sampling. These options are shown on the right side of the screen. Again, they are broken down into several panels, which are switchable with the right tab bar.
 
-:::{figure} ../screenshots/echelle.png
+:::{figure} images/θ.png
 :alt: Right Panel 1: Manual Tuning
 
 Right Panel 1: Manual Tuning
 :::
+
+:::{figure} images/bounds.png
+:alt: Right Panel 2: Bounds and Other Options
+
+Right Panel 2: Bounds and Other Options
+:::
+
