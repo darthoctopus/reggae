@@ -309,7 +309,6 @@ class normal():
         return x
 
 
-
 class uniform():
 
     def __init__(self, **kwargs):
@@ -523,18 +522,34 @@ class beta():
 
         Parameters
         ----------
-        x : array
+        x : array-like
             Input support for the probability density.
 
         Returns
         -------
-        _x : array
+        _x : array-like
             x translated and scaled to the range 0 to 1.
 
         """
+
         return (x - self.loc) / self.scale
 
     def _inverse_transform(self, x):
+        """ Invert transformation on x
+
+        Translates and scales the input x to the original interval according
+        to the loc and scale parametrs.
+
+        Parameters
+        ----------
+        x : array-like
+            Input support for the probability on the interval 0 to 1.
+        
+        Returns
+        -------
+        _x : array-like
+            x translated and scaled from the range 0 to 1 to the loc and scale.
+        """
 
         return x * self.scale + self.loc
 
