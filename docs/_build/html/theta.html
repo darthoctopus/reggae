@@ -1,0 +1,199 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>theta &#8212; reggae 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="reggae" href="reggae.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-reggae.theta">
+<span id="theta"></span><h1>theta<a class="headerlink" href="#module-reggae.theta" title="Permalink to this heading">¶</a></h1>
+<p>Rather than pass around raw numpy arrays, Reggae uses
+dataclass objects to characterise the various θ parameters
+entering into the model. One is for the background &amp; asymptotic
+p-mode parameters (θ_asy) inherited from pbjam, and one is for
+the dipole modes (θ_reggae) which Reggae as a tool is intended
+to assist in fitting.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="reggae.theta.ThetaAsy">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">reggae.theta.</span></span><span class="sig-name descname"><span class="pre">ThetaAsy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">log_numax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_dnu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_d02</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_hmax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_env_width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_mode_width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reggae.theta.ThetaAsy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters for the asymptotic description of l = 0,2 modes</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="reggae.theta.ThetaAsy.n_p">
+<span class="sig-name descname"><span class="pre">n_p</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_orders</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reggae.theta.ThetaAsy.n_p" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build array of radial orders</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reggae.theta.ThetaAsy.nmax">
+<span class="sig-name descname"><span class="pre">nmax</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#reggae.theta.ThetaAsy.nmax" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute nmax</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reggae.theta.ThetaAsy.nu_0">
+<span class="sig-name descname"><span class="pre">nu_0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_orders</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reggae.theta.ThetaAsy.nu_0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute frequencies of the radial orders</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="reggae.theta.ThetaBkg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">reggae.theta.</span></span><span class="sig-name descname"><span class="pre">ThetaBkg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hsig1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dhnu1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exp1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hsig2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dhnu2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exp2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hsig3</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hnu3</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exp3</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">white</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reggae.theta.ThetaBkg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters for the Harvey-like background terms of the model</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="reggae.theta.ThetaObs">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">reggae.theta.</span></span><span class="sig-name descname"><span class="pre">ThetaObs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Teff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bprp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reggae.theta.ThetaObs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters to compare with additional observational parameters</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="reggae.theta.ThetaReg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">reggae.theta.</span></span><span class="sig-name descname"><span class="pre">ThetaReg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dPi0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_L</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_D</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon_g</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_omega_core</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d01</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha_g</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inclination</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_omega_env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reggae.theta.ThetaReg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters for Reggae (asymptotic description of l = 1 modes)</p>
+<p>If theta is a numpy array, generate an instance as
+theta = ThetaReg(<a href="#id1"><span class="problematic" id="id2">*</span></a>θ)</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="reggae.theta.ThetaReg.inv_prior_transform">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">inv_prior_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">θ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reggae.theta.ThetaReg.inv_prior_transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prior transform for inverse sampling</p>
+<p>Evalues the ppf (quantile function) given a set of quantile values u
+drawn from the n-dimensional hypercube.</p>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading">¶</a></h2>
+<dl class="simple">
+<dt>u<span class="classifier">np.array</span></dt><dd><p>Array of values between 0 and 1 drawn uniformly from the 
+n-dimensional hypercube.</p>
+</dd>
+<dt>bounds<span class="classifier">np.array</span></dt><dd><p>Array of bounds for the distributions in case they need to be
+truncated.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reggae.theta.ThetaReg.prior_transform">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">prior_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reggae.theta.ThetaReg.prior_transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prior transform for inverse sampling</p>
+<p>Evalues the ppf (quantile function) given a set of quantile values u
+drawn from the n-dimensional hypercube.</p>
+<section id="id3">
+<h2>Parameters<a class="headerlink" href="#id3" title="Permalink to this heading">¶</a></h2>
+<dl class="simple">
+<dt>u<span class="classifier">np.array</span></dt><dd><p>Array of values between 0 and 1 drawn uniformly from the 
+n-dimensional hypercube.</p>
+</dd>
+<dt>bounds<span class="classifier">np.array</span></dt><dd><p>Array of bounds for the distributions in case they need to be
+truncated.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">reggae</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="api.html">API</a><ul>
+      <li>Previous: <a href="reggae.html" title="previous chapter">reggae</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Joel Ong, Martin Nielsen, Emily Hatt, Guy Davies, Bill Chaplin.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 6.2.1</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="_sources/theta.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

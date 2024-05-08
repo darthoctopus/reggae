@@ -1,0 +1,289 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>dipolestar &#8212; reggae 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="reggae" href="reggae.html" />
+    <link rel="prev" title="API" href="api.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-reggae.dipolestar">
+<span id="dipolestar"></span><h1>dipolestar<a class="headerlink" href="#module-reggae.dipolestar" title="Permalink to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="reggae.dipolestar.DipoleStar">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">reggae.dipolestar.</span></span><span class="sig-name descname"><span class="pre">DipoleStar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reggae.dipolestar.DipoleStar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generalisation of pbjam.star to assist in determination of dipole mixed-mode
+parameters.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="reggae.dipolestar.DipoleStar.from_pbjam">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_pbjam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">star</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reggae.dipolestar.DipoleStar.from_pbjam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Import and prepare results from PBjam</p>
+<p>Takes instances of the either the pbjam.star or pbjam.modeID.modeIDsampler 
+classes and constructs a residual spectrum, by dividing out the l=2,0 (including
+the background) or just the background respectively.</p>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading">¶</a></h2>
+<dl class="simple">
+<dt>klass: self</dt><dd><p>reggae.DipoleStar class self.</p>
+</dd>
+<dt>star: object</dt><dd><p>Instance of the pbjam.star or pbjam.modeID.modeIDsampler classes.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reggae.dipolestar.DipoleStar.genetic_algorithm">
+<span class="sig-name descname"><span class="pre">genetic_algorithm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solve_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reggae.dipolestar.DipoleStar.genetic_algorithm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the maximum likelihood using a genetic algorithm.</p>
+<p>Any keyword arguments are passed to the yabox.DE initializatoin.</p>
+<dl class="simple">
+<dt>solve_kwarg: dict, optional</dt><dd><p>Dictionary of argumentts to pass to the yabox.DE.solve method.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reggae.dipolestar.DipoleStar.get_bounds">
+<span class="sig-name descname"><span class="pre">get_bounds</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#reggae.dipolestar.DipoleStar.get_bounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set bounds for model parameter priors.</p>
+<section id="returns">
+<h2>Returns<a class="headerlink" href="#returns" title="Permalink to this heading">¶</a></h2>
+<dl class="simple">
+<dt>bounds: list</dt><dd><p>List of bounds.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reggae.dipolestar.DipoleStar.inv_ptform">
+<span class="sig-name descname"><span class="pre">inv_ptform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">norm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reggae.dipolestar.DipoleStar.inv_ptform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turns θ_reg object into coordinates on the unit cube</p>
+<section id="id1">
+<h2>Parameters<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h2>
+<dl class="simple">
+<dt>norm: jnp.array</dt><dd><p>Point location in model parameters space.</p>
+</dd>
+<dt>Returns: jnp.array</dt><dd><p>Point location in the unit hypercube.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reggae.dipolestar.DipoleStar.ln_like">
+<span class="sig-name descname"><span class="pre">ln_like</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reggae.dipolestar.DipoleStar.ln_like" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the model log-likelihood at theta</p>
+<p>The log-likelihood is the joint probability of observing
+the spectrum given the model.</p>
+<section id="id2">
+<h2>Parameters<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h2>
+<dl class="simple">
+<dt>theta: jnp.array</dt><dd><p>Array of model parameters</p>
+</dd>
+<dt>lnlike: float</dt><dd><p>log-likelihood at theta.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reggae.dipolestar.DipoleStar.make_pbjam_model">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_pbjam_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">star</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reggae.dipolestar.DipoleStar.make_pbjam_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a spectrum model from PBjam output</p>
+<p>Takes either a pbjam.star or pbjam.modeID.modeIDsampler object from a previous
+PBjam run. This is used to construct a residual spectrum.</p>
+<p>In the case of a pbjam.star object being passed, a set of models are drawn
+and averaged.</p>
+<section id="id3">
+<h2>Parameters<a class="headerlink" href="#id3" title="Permalink to this heading">¶</a></h2>
+<dl class="simple">
+<dt>star: object</dt><dd><p>Either a pbjam.star or pbjam.modeID.modeIDsampler object.</p>
+</dd>
+<dt>n_samples: int, optional</dt><dd><p>Number of samples to use to construct the mean model. Default is 50.</p>
+</dd>
+</dl>
+<p>Returns:
+mod: jnp.array</p>
+<blockquote>
+<div><p>Spectrum model.</p>
+</div></blockquote>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reggae.dipolestar.DipoleStar.model">
+<span class="sig-name descname"><span class="pre">model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reggae.dipolestar.DipoleStar.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct the model for the likelihood evaluation</p>
+<section id="id4">
+<h2>Parameters<a class="headerlink" href="#id4" title="Permalink to this heading">¶</a></h2>
+<dl class="simple">
+<dt>theta: jnp.array</dt><dd><p>Array of model parameters.</p>
+</dd>
+</dl>
+</section>
+<section id="id5">
+<h2>Returns<a class="headerlink" href="#id5" title="Permalink to this heading">¶</a></h2>
+<dl class="simple">
+<dt>mod: jnp.array</dt><dd><p>Spectrum model.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reggae.dipolestar.DipoleStar.ptform">
+<span class="sig-name descname"><span class="pre">ptform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reggae.dipolestar.DipoleStar.ptform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turns coordinates on the unit cube into θ_reg object</p>
+<section id="id6">
+<h2>Parameters<a class="headerlink" href="#id6" title="Permalink to this heading">¶</a></h2>
+<dl class="simple">
+<dt>u: list</dt><dd><p>Point location in the unit hypercube.</p>
+</dd>
+</dl>
+</section>
+<section id="id7">
+<h2>Returns<a class="headerlink" href="#id7" title="Permalink to this heading">¶</a></h2>
+<dl class="simple">
+<dt>x: jnp.array</dt><dd><p>Point location in model parameter space.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reggae.dipolestar.DipoleStar.select_n_g">
+<span class="sig-name descname"><span class="pre">select_n_g</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#reggae.dipolestar.DipoleStar.select_n_g" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select the relevant radial g-mode orders</p>
+<p>Based on prior estimates of the relevant range period spacing and 
+eps_g, computes g-modes that significantly overlap with the envelope.</p>
+<p>These will be used to compute the model.</p>
+<section id="id8">
+<h2>Returns<a class="headerlink" href="#id8" title="Permalink to this heading">¶</a></h2>
+<dl class="simple">
+<dt>n_g: jnp.array</dt><dd><p>List of radial orders for the g-modes.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reggae.dipolestar.DipoleStar.simplex">
+<span class="sig-name descname"><span class="pre">simplex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta_reg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reggae.dipolestar.DipoleStar.simplex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find maximum log-likelihood using Nelder-Mead downhill simplex minimization.</p>
+<section id="id9">
+<h2>Parameters<a class="headerlink" href="#id9" title="Permalink to this heading">¶</a></h2>
+<dl class="simple">
+<dt>theta_reg: dataclass</dt><dd><p>A ThetaReg dataclass instance</p>
+</dd>
+<dt>norm: jnp.array</dt><dd><p>An initial point in model parameter space.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">reggae</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="api.html">API</a><ul>
+      <li>Previous: <a href="api.html" title="previous chapter">API</a></li>
+      <li>Next: <a href="reggae.html" title="next chapter">reggae</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Joel Ong, Martin Nielsen, Emily Hatt, Guy Davies, Bill Chaplin.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 6.2.1</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="_sources/dipolestar.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

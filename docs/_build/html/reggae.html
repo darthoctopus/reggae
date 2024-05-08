@@ -1,0 +1,453 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>reggae &#8212; reggae 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="theta" href="theta.html" />
+    <link rel="prev" title="dipolestar" href="dipolestar.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-reggae.reggae">
+<span id="reggae"></span><h1>reggae<a class="headerlink" href="#module-reggae.reggae" title="Permalink to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="reggae.reggae.reggae">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">reggae.reggae.</span></span><span class="sig-name descname"><span class="pre">reggae</span></span><a class="headerlink" href="#reggae.reggae.reggae" title="Permalink to this definition">¶</a></dt>
+<dd><p>jax’d numerical routines for generation of dipole mixed modes
+and a PSD model.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="reggae.reggae.reggae.asymptotic_nu_g">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">asymptotic_nu_g</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dPi0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_N2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps_g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">l</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reggae.reggae.reggae.asymptotic_nu_g" title="Permalink to this definition">¶</a></dt>
+<dd><p>Asymptotic relation for the g-mode frequencies
+in terms of a fundamental period offset (defined by the
+maximum Brunt-Vaisala frequency), the asymptotic g-mode period
+spacing, the g-mode phase offset, and an optional curvature term.</p>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading">¶</a></h2>
+<dl class="simple">
+<dt>n_g: array-like</dt><dd><p>Array of radial orders at which the g-mode frequencies are computed</p>
+</dd>
+<dt>dPi0: float</dt><dd><p>The period spacing of the g-modes.</p>
+</dd>
+<dt>max_N2: float</dt><dd><p>The maximum of the Brunt-Vaisala frequency, used to define the fundamental
+period offset.</p>
+</dd>
+<dt>eps_g: float </dt><dd><p>Phase offset for the g-modes.</p>
+</dd>
+<dt>alpha: float, optional</dt><dd><p>Curvature factor for the g-mode periods. Default is 0.</p>
+</dd>
+<dt>numax: float, optional </dt><dd><p>numax of the envelope. Default is 0</p>
+</dd>
+<dt>l=1: int, optional</dt><dd><p>Angular degree of the g-modes. Default is 1.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h2>Returns<a class="headerlink" href="#returns" title="Permalink to this heading">¶</a></h2>
+<dl class="simple">
+<dt>nu_g: jnp.array</dt><dd><p>Array of asymptotic g-mode frequencies.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reggae.reggae.reggae.eigh">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">eigh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reggae.reggae.reggae.eigh" title="Permalink to this definition">¶</a></dt>
+<dd><p>From <a class="reference external" href="https://jackd.github.io/posts/generalized-eig-jvp/">https://jackd.github.io/posts/generalized-eig-jvp/</a></p>
+<p>Compute the solution to the symmetrized generalized eigenvalue problem.</p>
+<p>a_s &#64; w = b_s &#64; w &#64; np.diag(v)</p>
+<p>where a_s = (a + a.H) / 2, b_s = (b + b.H) / 2 are the symmetrized versions of the
+inputs and H is the Hermitian (conjugate transpose) operator.</p>
+<p>For self-adjoint inputs the solution should be consistent with <cite>scipy.linalg.eigh</cite>
+i.e.</p>
+<p>v, w = eigh(a, b)
+v_sp, w_sp = scipy.linalg.eigh(a, b)
+np.testing.assert_allclose(v, v_sp)
+np.testing.assert_allclose(w, standardize_angle(w_sp))</p>
+<p>Note this currently uses <cite>jax.linalg.eig(jax.linalg.solve(b, a))</cite>, which will be
+slow because there is no GPU implementation of <cite>eig</cite> and it’s just a generally
+inefficient way of doing it. Future implementations should wrap cuda primitives.
+This implementation is provided primarily as a means to test <cite>eigh_jvp_rule</cite>.</p>
+<dl>
+<dt>Args:</dt><dd><p>a: [n, n] float self-adjoint matrix (i.e. conj(transpose(a)) == a)
+b: [n, n] float self-adjoint matrix (i.e. conj(transpose(b)) == b)</p>
+</dd>
+<dt>Returns:</dt><dd><p>v: eigenvalues of the generalized problem in ascending order.
+w: eigenvectors of the generalized problem, normalized such that</p>
+<blockquote>
+<div><p>w.H &#64; b &#64; w = I.</p>
+</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reggae.reggae.reggae.generate_matrices">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">generate_matrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu_p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu_g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_L</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_D</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reggae.reggae.reggae.generate_matrices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a coupling matrix given a set of p- and g-mode frequencies,
+their radial orders n_p and n_g, and some polynomial coefficients for the
+scaled dimensionless coupling strengths and overlap integrals.</p>
+<section id="id1">
+<h2>Parameters:<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h2>
+<dl class="simple">
+<dt>n_p: array-like </dt><dd><p>Contains π-mode radial orders, of length N_π.</p>
+</dd>
+<dt>n_g: array-like</dt><dd><p>Contains γ-mode radial orders, of length N_γ.</p>
+</dd>
+<dt>ν_p: array-like</dt><dd><p>Contains p-mode frequencies, of length N_π.</p>
+</dd>
+<dt>ν_g: array-like</dt><dd><p>Contains g-mode frequencies, of length N_γ.</p>
+</dd>
+<dt>p_L: array-like</dt><dd><p>Parameter vector describing 2D polynomial coefficients for coupling strengths.</p>
+</dd>
+<dt>p_D: array-like</dt><dd><p>parameter vector describing 2D polynomial coefficients for overlap integrals.</p>
+</dd>
+</dl>
+</section>
+<section id="id2">
+<h2>Returns<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h2>
+<dl class="simple">
+<dt>L<span class="classifier">array-like</span></dt><dd><p>Coupling matrix of shape N_π+N_γ.</p>
+</dd>
+<dt>D<span class="classifier">array-like</span></dt><dd><p>Coupling matrix of shape N_π+N_γ.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reggae.reggae.reggae.getl1">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">getl1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu0_p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dnu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d02</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dPi0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_L</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_D</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon_g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha_g</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dnu_p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dnu_g</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reggae.reggae.reggae.getl1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the l=1 mode frequencies using the matrix formalism</p>
+<section id="id3">
+<h2>Parameters<a class="headerlink" href="#id3" title="Permalink to this heading">¶</a></h2>
+<dl class="simple">
+<dt>nu0_p: array-like</dt><dd><p>Array of l=0 mode frequencies</p>
+</dd>
+<dt>numax: float </dt><dd><p>numax for the star.</p>
+</dd>
+<dt>dnu: float </dt><dd><p>Large separation for the star.</p>
+</dd>
+<dt>d02: float </dt><dd><p>Small separation for the star.</p>
+</dd>
+<dt>n_p: array-like </dt><dd><p>Array of radial orders for the p-modes</p>
+</dd>
+<dt>d01: float </dt><dd><p>The l=10 separation.</p>
+</dd>
+<dt>dPi0: float </dt><dd><p>Period spacing.</p>
+</dd>
+<dt>p_L: float </dt><dd><p>Coupling coefficient.</p>
+</dd>
+<dt>p_D: float </dt><dd><p>Coupling coefficient</p>
+</dd>
+<dt>epsilon_g: float </dt><dd><p>The asymptotic g-mode phase offset.</p>
+</dd>
+<dt>alpha_g: float</dt><dd><p>The asymptotic g-mode curvature.</p>
+</dd>
+<dt>dnu_p: float, optional</dt><dd><p>Small frequency offset for the p-modes. Default is 0.</p>
+</dd>
+<dt>dnu_g: float, optional</dt><dd><p>Small frequency offset for the g-mode. Default is 0.</p>
+</dd>
+</dl>
+</section>
+<section id="id4">
+<h2>Returns<a class="headerlink" href="#id4" title="Permalink to this heading">¶</a></h2>
+<dl class="simple">
+<dt>nu1: jnp.array</dt><dd><p>l=1 mode frequencies.</p>
+</dd>
+<dt>zeta: jnp.array</dt><dd><p>Mixing degree of the modes.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reggae.reggae.reggae.l1model">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">l1model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu1s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zeta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dnu</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reggae.reggae.reggae.l1model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a power spectrum model from a set of modes (nu1s).</p>
+<p>The model consists of a sequence of Lorentizan profiles.</p>
+<section id="parmeters">
+<h2>Parmeters<a class="headerlink" href="#parmeters" title="Permalink to this heading">¶</a></h2>
+<dl class="simple">
+<dt>nu: jnp.array</dt><dd><p>Frequency bins on which to compute the spectrum model.</p>
+</dd>
+<dt>nu1s: jnp.array</dt><dd><p>l=1 mode frequencies.</p>
+</dd>
+<dt>zeta: jnp.array</dt><dd><p>Mixing degree for the modes. 0 is completely p-like, 1 is 
+completely g-like.</p>
+</dd>
+<dt>dnu: float</dt><dd><p>Large separation for the star.</p>
+</dd>
+<dt>lw: jnp.array, optional</dt><dd><p>Linewidths for the modes. Default is None.</p>
+</dd>
+<dt>amps: jnp.array, optional</dt><dd><p>Mode amplitudes. Default is None.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reggae.reggae.reggae.l1model_rot">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">l1model_rot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu1s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zeta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dnu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omega</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reggae.reggae.reggae.l1model_rot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a power spectrum model from a set of modes (nu1s), including the effects of rotation</p>
+<p>The model consists of a sequence of Lorentizan profiles.</p>
+<section id="id5">
+<h2>Parmeters<a class="headerlink" href="#id5" title="Permalink to this heading">¶</a></h2>
+<dl class="simple">
+<dt>nu: jnp.array</dt><dd><p>Frequency bins on which to compute the spectrum model.</p>
+</dd>
+<dt>nu1s: jnp.array</dt><dd><p>l=1 mode frequencies.</p>
+</dd>
+<dt>zeta: jnp.array</dt><dd><p>Mixing degree for the modes. 0 is completely p-like, 1 is 
+completely g-like.</p>
+</dd>
+<dt>dnu: float</dt><dd><p>Large separation for the star.</p>
+</dd>
+<dt>omega: float</dt><dd><p>Rotation rate of the star.</p>
+</dd>
+<dt>inc: float</dt><dd><p>Inclination of the rotation axis with respect to the observers line of sigh.</p>
+</dd>
+<dt>lw: jnp.array, optional</dt><dd><p>Linewidths for the modes. Default is None.</p>
+</dd>
+<dt>amps: jnp.array, optional</dt><dd><p>Mode amplitudes. Default is None.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reggae.reggae.reggae.new_modes">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">new_modes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">D</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">l</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ξr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ξh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reggae.reggae.reggae.new_modes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given the matrices A and D such that we have eigenvectors</p>
+<p>A cᵢ = -ωᵢ² D cᵢ,</p>
+<p>with ω in Hz, we solve for the frequencies ν (μHz), mode mixing coefficient ζ, and
+(if the vector coefficients ξ_r, ξ_h at a specified radius R are provided) the
+inertiae E of the modes of the coupled system. The inertiae are evaluated assuming unit
+normalisation of the eigenfunctions, so that</p>
+<p>Eᵢ = 4π int dm <a href="#id6"><span class="problematic" id="id7">|</span></a>ξᵢ(m)|² / (M int dΩ <a href="#id8"><span class="problematic" id="id9">|</span></a>ξᵢ(R)|²) === 4π / (M int dΩ <a href="#id10"><span class="problematic" id="id11">|</span></a>ξᵢ(R)|²).</p>
+<p>Note that this differs by 4π from some other definitions; this is for consistency
+with GYRE. Overall constant factors shouldn’t really matter in any case.</p>
+<section id="id12">
+<h2>Parameters<a class="headerlink" href="#id12" title="Permalink to this heading">¶</a></h2>
+<dl class="simple">
+<dt>A: array-like</dt><dd><p>Coupling matrix.</p>
+</dd>
+<dt>D: array-like</dt><dd><p>Coupling matrix.</p>
+</dd>
+<dt>N_π: int</dt><dd><p>Number of p-modes</p>
+</dd>
+<dt>l: int, optional.</dt><dd><p>Angular degree, default is 1.</p>
+</dd>
+<dt>ξr: array-like</dt><dd><p>Radial component of the eigenfunctions, default is None.</p>
+</dd>
+<dt>ξh: array-like</dt><dd><p>Horizontal component of the eigenfunctions, default is None.</p>
+</dd>
+<dt>M: float</dt><dd><p>Stellar mass, default is None.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reggae.reggae.reggae.poly_params_2d">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">poly_params_2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reggae.reggae.reggae.poly_params_2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn a parameter vector into an upper triangular coefficient matrix.</p>
+<section id="id13">
+<h2>Parameters<a class="headerlink" href="#id13" title="Permalink to this heading">¶</a></h2>
+<dl class="simple">
+<dt>p: array-like</dt><dd><p>1D array of polynomial coefficients to be broadcast to upper triangular matrix.</p>
+</dd>
+</dl>
+</section>
+<section id="id14">
+<h2>Returns<a class="headerlink" href="#id14" title="Permalink to this heading">¶</a></h2>
+<dl class="simple">
+<dt>C: array-like</dt><dd><p>2D array consisting of a upper triangular matrix with entries corresponding to p.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reggae.reggae.reggae.polyval2d">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">polyval2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">increasing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reggae.reggae.reggae.polyval2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a 2D polynomial</p>
+<section id="id15">
+<h2>Parameters<a class="headerlink" href="#id15" title="Permalink to this heading">¶</a></h2>
+<dl class="simple">
+<dt>x: array-like</dt><dd><p>1D array</p>
+</dd>
+<dt>y: array-like</dt><dd><p>1D array</p>
+</dd>
+<dt>c: array-like</dt><dd><p>2D polynomial parameers</p>
+</dd>
+<dt>increasing: bool, optional</dt><dd><p>Order of the power of the columns.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reggae.reggae.reggae.select_n_g">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">select_n_g</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freq_lims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dPi0_lims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps_lims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_N2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reggae.reggae.reggae.select_n_g" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select relevant g-mode radial orders.</p>
+<p>Based on prior estimates for period spacing and g-mode phase offset, computes
+the g-mode radial orders that are expected to be relevant in the sampling.</p>
+<section id="id16">
+<h2>Parameters<a class="headerlink" href="#id16" title="Permalink to this heading">¶</a></h2>
+<dl class="simple">
+<dt>numax: float</dt><dd><p>numax of the star</p>
+</dd>
+<dt>freq_lims: list</dt><dd><p>List of lower and upper frequency limits to consider.</p>
+</dd>
+<dt>dPi0_lims: list</dt><dd><p>List of lower and upper limits of the period spacing to consider.</p>
+</dd>
+<dt>eps_lims: list</dt><dd><p>List of lower and upper limits of the g-mode phase offset to consider.</p>
+</dd>
+<dt>max_N2: float</dt><dd><p>The maximum of the Brunt-Vaisala frequency, used to define the fundamental
+period offset.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reggae.reggae.reggae.standardize_angle">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">standardize_angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">w</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reggae.reggae.reggae.standardize_angle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function of eigh</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reggae.reggae.reggae.symmetrize">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">symmetrize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reggae.reggae.reggae.symmetrize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function of eigh</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reggae.reggae.reggae.wrap_polyval2d">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">wrap_polyval2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reggae.reggae.reggae.wrap_polyval2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate 2D polynomial, broadcasting shapes of x and y where appropriate.</p>
+<section id="id17">
+<h2>Parameters<a class="headerlink" href="#id17" title="Permalink to this heading">¶</a></h2>
+<dl class="simple">
+<dt>x: array-like</dt><dd><p>x-coordinate for 2D polynomial.</p>
+</dd>
+<dt>y: array-like</dt><dd><p>y-coordinate for 2D polynomial.</p>
+</dd>
+<dt>p: array-like</dt><dd><p>Polynomial coefficients.</p>
+</dd>
+</dl>
+</section>
+<section id="id18">
+<h2>Returns<a class="headerlink" href="#id18" title="Permalink to this heading">¶</a></h2>
+<dl class="simple">
+<dt>o: array-like</dt><dd><p>Result of evaluating the 2D polynomial.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">reggae</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="api.html">API</a><ul>
+      <li>Previous: <a href="dipolestar.html" title="previous chapter">dipolestar</a></li>
+      <li>Next: <a href="theta.html" title="next chapter">theta</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Joel Ong, Martin Nielsen, Emily Hatt, Guy Davies, Bill Chaplin.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 6.2.1</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="_sources/reggae.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

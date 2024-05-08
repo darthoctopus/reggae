@@ -1,0 +1,188 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Usage &#8212; reggae 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API" href="api.html" />
+    <link rel="prev" title="Installation" href="installation.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">¶</a></h1>
+<p>Reggae is intended to be operated primarily through its GUI, although many GUI actions correspond to methods of the <a class="reference internal" href="dipolestar.html#reggae.dipolestar.DipoleStar" title="reggae.dipolestar.DipoleStar"><code class="xref py py-class docutils literal notranslate"><span class="pre">DipoleStar</span></code></a> class. There are a couple of ways to launch the GUI:</p>
+<ul class="simple">
+<li><p>Executing the <code class="docutils literal notranslate"><span class="pre">reggae</span></code> module from the command line: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">reggae</span></code>. This will launch an empty instance of the GUI.</p></li>
+<li><p>Instantiating a <a class="reference internal" href="qtconsole.html#reggae.qtconsole.ReggaeDebugWindow" title="reggae.qtconsole.ReggaeDebugWindow"><code class="xref py py-class docutils literal notranslate"><span class="pre">ReggaeDebugWindow</span></code></a>. Passing it no arguments will launch an empty instance, while passing it a <code class="docutils literal notranslate"><span class="pre">pbjam.star.star</span></code> or <a class="reference internal" href="dipolestar.html#reggae.dipolestar.DipoleStar" title="reggae.dipolestar.DipoleStar"><code class="xref py py-class docutils literal notranslate"><span class="pre">DipoleStar</span></code></a> object will open that object in the GUI.</p></li>
+</ul>
+<section id="left-panels-diagnostic-information">
+<h2>Left Panels: Diagnostic Information<a class="headerlink" href="#left-panels-diagnostic-information" title="Permalink to this heading">¶</a></h2>
+<p>As a diagnostic utility, Reggae exposes a large amount of information to the viewer. This information is broken down in to several panels, which are switchable with the tab bar on the left side of the screen.</p>
+<figure class="align-default" id="id1">
+<img alt="Left Panel 1: Power Spectrum" src="_images/ps.png" />
+<figcaption>
+<p><span class="caption-text">Left Panel 1: Power Spectrum</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The first panel shows the power spectrum. Like <code class="docutils literal notranslate"><span class="pre">pbjam</span></code>, Reggae uses the so-called SNR power spectrum (i.e. with a smooth background divided out) as its focus is on fitting individual peaks — this is shown in black. To further focus on the dipole modes, a model of the radial and quadrupole modes inherited from <code class="docutils literal notranslate"><span class="pre">pbjam</span></code> is further divided out — this is shown in blue. Thus, any residual peaks are those ignored by <code class="docutils literal notranslate"><span class="pre">pbjam</span></code>, which, a priori, are primarily dipole modes. However, the user should ensure that <code class="docutils literal notranslate"><span class="pre">pbjam</span></code>’s model works as expected before proceeding further. The black and blue curves should agree except at the locations of <code class="docutils literal notranslate"><span class="pre">pbjam</span></code>’s identified radial and quadrupole modes, at which locations there should be exactly two peaks at a time in the black curve that are not reflected in the blue.</p>
+<p>Later steps in the fitting procedure, using different optimisation schemes, may produce estimates of the parameters as well, each also corresponding to a PSD model. These are shown with various coloured curves.</p>
+<figure class="align-default" id="id2">
+<img alt="Left Panel 2: $\chi^2$ Landscape" src="_images/%CF%872.png" />
+<figcaption>
+<p><span class="caption-text">Left Panel 2: <span class="math notranslate nohighlight">\(\chi^2\)</span> Landscape</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>This panel displays the values of <span class="math notranslate nohighlight">\(\chi^2 = -\log \mathcal{L}\)</span> as a function of each of the optimisation parameters, holding the others constant at their current values, should the user initiate a parameter sweep (see Right Panel 2 below).</p>
+<figure class="align-default" id="id3">
+<img alt="Left Panel 3: Echelle Diagrams" src="_images/echelle.png" />
+<figcaption>
+<p><span class="caption-text">Left Panel 3: Echelle Diagrams</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Given that the p- and g-modes are known to separately possess characteristic frequency and period spacings, respectively, it is conventional to examine the locations of these peaks in the power spectrum through the use of “echelle power diagrams”. This third panel shows such diagrams, where the power spectrum is phase-folded with respect to these frequency or period spacings on the horizontal axis.</p>
+<p>Reggae’s mode identification step turns a small number of parameters — such as <span class="math notranslate nohighlight">\(\Delta\Pi\)</span>, <span class="math notranslate nohighlight">\(\epsilon_g\)</span>, coupling strengths, and core/envelope rotation rates — into a large number of mode frequencies and heights, each one corresponding to a peak in the power spectrum associated with a mode of mixed p-like and g-like character. A good set of Reggae’s parameters should also result in mode frequencies, placed on these diagrams, that align visually with local maxima in the power spectrum.</p>
+<p>For the period-echelle power diagram in particular, the horizontal coordinate is further “stretched” through the use of the coordinate transform described in Mosser et al. 2012, 2015, 2017, 2018; Ong &amp; Gehan 2023. In summary: in the asymptotic regime, mixed modes satisfy an eigenvalue equation parameterised by a single coupling strength <span class="math notranslate nohighlight">\(q\)</span>. If ansatz values of <span class="math notranslate nohighlight">\(q\)</span>, <span class="math notranslate nohighlight">\(\Delta\Pi\)</span>, and the pure p-mode frequencies are supplied, this allows the pure g-mode frequencies to be inferred from the mixed modes analytically. More generally, this specifies a coordinate transformation in the period coordinate mapping the mixed mode frequencies to the g-mode frequencies. As such, when applied to the period-echelle power diagram, it will map avoided crossings to vertical ridges, if the supplied values of <span class="math notranslate nohighlight">\(q\)</span>, <span class="math notranslate nohighlight">\(\Delta\Pi\)</span>, and the p-mode frequencies are accurate.</p>
+<figure class="align-default" id="id4">
+<img alt="Left Panel 4: Posterior Distributions" src="_images/posterior.png" />
+<figcaption>
+<p><span class="caption-text">Left Panel 4: Posterior Distributions</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>In addition to finding optimal point estimates, Reggae also allows the dipole-mode parameters to be determined by nested sampling. This panel simply displays the corner plot of the joint posterior distribution for the dipole-mode model parameters.</p>
+</section>
+<section id="right-panels-tuning-parameters">
+<h2>Right Panels: Tuning Parameters<a class="headerlink" href="#right-panels-tuning-parameters" title="Permalink to this heading">¶</a></h2>
+<p>Reggae is intended to permit the user to derive estimates of parameters describing the dipole modes. As such, its GUI provides various ways by which one might either manually fine-tune a guess at these parameters, or else arrive at point esimates or posterior distributions through automated optimisation or sampling. These options are shown on the right side of the screen. Again, they are broken down into several panels, which are switchable with the right tab bar.</p>
+<figure class="align-default" id="id5">
+<img alt="Right Panel 1: Manual Tuning" src="_images/%CE%B8.png" />
+<figcaption>
+<p><span class="caption-text">Right Panel 1: Manual Tuning</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>This panel allows the user to manually fine-tune the numerical values of a set of dipole-mode parameters. <code class="docutils literal notranslate"><span class="pre">pbjam</span></code> will use a generative model for dipole gravitoacoustic mixed modes using the parameterisation of Ong &amp; Basu (2020), with the frequency-dependent coupling strength described with two parameters (one for each of the two matrices entering into the parameterisation). The full set of parameters in the model, <span class="math notranslate nohighlight">\(\theta_\text{reggae}\)</span>, is thus:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\Delta\Pi_0\)</span>, the notional period spacing of the g-mode cavity; this is related to the period spacing of any given <span class="math notranslate nohighlight">\(\ell\)</span> as <span class="math notranslate nohighlight">\(\Delta\Pi_\ell = \Delta\Pi_0 / \sqrt{\ell(\ell + 1)}\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(p_L\)</span> and <span class="math notranslate nohighlight">\(p_D\)</span>, the two coupling parameters described above.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\epsilon_g\)</span>, a g-mode phase offset.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\log \left(\delta\omega_\mathrm{rot, g} / \mathrm{\mu Hz}\right)\)</span> and <span class="math notranslate nohighlight">\(\log \left(\delta\omega_\mathrm{rot, p} / \mathrm{\mu Hz}\right)\)</span> — the implementation of the PSD model (below) accepts separate values of the core (g-mode) and envelope (p-mode) rotational splittings. The pure p- and g-modes are split into multiplets separately before mode-coupling calculations are performed, thereby fully accounting for near-degeneracy asymmetric rotational splittings.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\delta_{01}\)</span>, an additional phase offset for the dipole p-modes relative to the asymptotic solution found by pbjam.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\alpha_g\)</span>, a curvature parameter for the g-modes (mirroring that of the p-modes in <code class="docutils literal notranslate"><span class="pre">pbjam</span></code>’s asymptotic parameterisation).</p></li>
+<li><p><span class="math notranslate nohighlight">\(i\)</span>, the inclination of the rotational axis, and</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">norm</span></code>, the height-to-background ratio of the envelope dipole-mode (being a Gaussian centred at <span class="math notranslate nohighlight">\(\nu_\text{max}\)</span> for solar-like oscillators). This is fitted independently of <code class="docutils literal notranslate"><span class="pre">pbjam</span></code>’s estimate of it for even-degree modes.</p></li>
+</ul>
+<p>The numerical values for Reggae’s current “manual” value of these parameters are thus shown, and may be modified, at the top of this panel. This is immediately followed by the control for running a simplex optimisation using the manual values as an initial guess. The best-fitting result for the simplex optimisation is saved independently of the manual value.</p>
+<p>These are followed by several plotting options for the échelle-diagram panel. Specifically, the user may opt to show or hide the mode frequencies associated with optimal model parameters from various optimisation schemes, as well as whether or not to display the sectoral modes (in addition to the zonal modes). The user may also force the recomputation of the mode frequencies.</p>
+<p>Following this, there are options specifying how the stretched period-echelle diagram (bottom half of the échelle-diagram left panel) is to be constructed. Stretched diagrams of this kind require the pure p-mode frequencies, the dipole-mode period spacing, and the asymptotic coupling strength <span class="math notranslate nohighlight">\(q\)</span> to be specified. The first two are computed from the current manual estimate of the dipole-mode parameters, while the user may choose to input a manual guess for the value of <span class="math notranslate nohighlight">\(q\)</span>. If desired, the conversion to the asymptotic <span class="math notranslate nohighlight">\(q\)</span> provided by an expression in Ong &amp; Gehan (2023) is also available. Plotting options (e.g. the ability to produce a replicated echelle diagram) are also exposed here</p>
+<p>Finally, there is a textbox for debug commands to be issued. This is to permit advanced manual manipulation of the <a class="reference internal" href="dipolestar.html#reggae.dipolestar.DipoleStar" title="reggae.dipolestar.DipoleStar"><code class="xref py py-class docutils literal notranslate"><span class="pre">DipoleStar</span></code></a> object, and most users will not need to worry about this.</p>
+<figure class="align-default" id="id6">
+<img alt="Right Panel 2: Bounds and Other Options" src="_images/bounds.png" />
+<figcaption>
+<p><span class="caption-text">Right Panel 2: Bounds and Other Options</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Several of the numerical methods exposed to the user require bounds (for optimisation, or for uninformative priors) to be specified. Upper and lower bounds to ranges of values for all of the parameters described above may thus be entered here. On the right side of each row is a “play” button, which initiates a parameter sweep for values of the log-likelihood function <span class="math notranslate nohighlight">\(\chi^2 = -\log \mathcal{L}\)</span>, whose results are shown in Left Panel 2. The corresponding entry of <span class="math notranslate nohighlight">\(\theta_\text{Reggae}\)</span> in Right Panel 1 is automatically set to the optimal value after performing such a sweep. The user may also recompute these bounds automatically around the current manual values of <span class="math notranslate nohighlight">\(\theta_\text{Reggae}\)</span>.</p>
+<p>The matrix formalism also requires a set of g-mode frequencies to be specified, which we determine with a user-specified range of <span class="math notranslate nohighlight">\(n_g\)</span>, so that in the asymptotic parameterisation <span class="math notranslate nohighlight">\(1/\nu_g \sim \Delta\Pi_\ell (n_g + \epsilon_g + \alpha_g(n_g - n_{g,\text{max}}))^2\)</span>. Upper and lower values of <span class="math notranslate nohighlight">\(n_g\)</span> (inclusive) may be provided here.</p>
+<p>The pure p-mode frequency for each <span class="math notranslate nohighlight">\(n_p\)</span> is also computed as <span class="math notranslate nohighlight">\(\nu_{1, n_p} = \nu_{0, n_p} - {1 \over 3}\delta_nu_{02, n_p} + \Delta\nu({1 \over 2} + d_{01})\)</span>, where <span class="math notranslate nohighlight">\(\nu_{0, n_p}\)</span> is the radial-mode frequency at that radial order, <span class="math notranslate nohighlight">\(\Delta\nu\)</span> is the asymptotic large separation, and <span class="math notranslate nohighlight">\(\delta\nu_{02, n_p}\)</span> is the local small separation. The user may opt to specify whether <code class="docutils literal notranslate"><span class="pre">pbjam</span></code> asymptotic or fitted values for the even-degree p-mode frequencies are used in this expression.</p>
+<p>Finally, there are controls for various optimisation and sampling schemes.</p>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">reggae</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="installation.html" title="previous chapter">Installation</a></li>
+      <li>Next: <a href="api.html" title="next chapter">API</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Joel Ong, Martin Nielsen, Emily Hatt, Guy Davies, Bill Chaplin.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 6.2.1</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="_sources/usage.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
