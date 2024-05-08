@@ -11,13 +11,11 @@ import jax
 jax.config.update('jax_enable_x64', True)
 
 UNITS = {
-    # absolute scalings inherited from Boeing
-
-    'DPI0': 1.25e-4, # μHz¯¹
-    'P_L': 4e-3, # Hz²
-    'P_D': 6e-4, # dimensionless
-
-}
+        # absolute scalings inherited from Boeing
+        'DPI0': 1.25e-4, # μHz¯¹
+        'P_L': 4e-3, # Hz²
+        'P_D': 6e-4, # dimensionless
+        }
 
 class reggae():
     """
@@ -72,9 +70,31 @@ class reggae():
     @staticmethod
     @jax.jit
     def l1model_rot(nu, nu1s, zeta, dnu, omega, *, inc=0, lw=None, amps=None):
-        '''
-        Generate a fake power spectrum with linear rotational splitting
-        '''
+        """
+        Generate a power spectrum model from a set of modes (nu1s), including the effects of rotation
+
+        The model consists of a sequence of Lorentizan profiles.
+
+        Parmeters
+        ---------
+        nu: jnp.array
+            Frequency bins on which to compute the spectrum model.
+        nu1s: jnp.array
+            l=1 mode frequencies.
+        zeta: jnp.array
+            Mixing degree for the modes. 0 is completely p-like, 1 is 
+            completely g-like.
+        dnu: float
+            Large separation for the star.
+        omega: float
+            Rotation rate of the star.
+        inc: float
+            Inclination of the rotation axis with respect to the observers line of sigh.
+        lw: jnp.array, optional
+            Linewidths for the modes. Default is None. 
+        amps: jnp.array, optional
+            Mode amplitudes. Default is None.
+        """
 
         return (
             reggae.l1model(nu, nu1s, zeta, dnu, lw=lw, amps=amps) * jnp.cos(inc)**2
@@ -161,9 +181,10 @@ class reggae():
         l=1: int, optional
             Angular degree of the g-modes. Default is 1.
 
-        returns
+        Returns
         -------
-    
+        nu_g: jnp.array
+            Array of asymptotic g-mode frequencies.
         """
 
         nu_to_omega = 2 * jnp.pi / 1e6
@@ -261,6 +282,19 @@ class reggae():
     @staticmethod
     @jax.jit
     def polyval2d(x, y, c, increasing=True):
+        """ Evaluate a 2D polynomial
+
+        Parameters
+        ----------
+        x: array-like
+            1D array
+        y: array-like
+            1D array
+        c: array-like
+            2D polynomial parameers
+        increasing: bool, optional
+            Order of the power of the columns.
+        """
 
         m, n = c.shape
         
@@ -273,19 +307,33 @@ class reggae():
     @staticmethod
     @jax.jit
     def generate_matrices(n_p, n_g, nu_p, nu_g, p_L, p_D):
-
-        '''
+        """
         Generate a coupling matrix given a set of p- and g-mode frequencies,
         their radial orders n_p and n_g, and some polynomial coefficients for the
         scaled dimensionless coupling strengths and overlap integrals.
-        Inputs:
-        n_p: ndarray containing π-mode radial orders, of length N_π
-        n_g: ndarray containing γ-mode radial orders, of length N_γ
-        ν_p: ndarray containing p-mode frequencies, of length N_π
-        ν_g: ndarray containing g-mode frequencies, of length N_γ
-        p_L: parameter vector describing 2D polynomial coefficients for coupling strengths
-        p_D: parameter vector describing 2D polynomial coefficients for overlap integrals
-        '''
+
+        Parameters:
+        -----------
+        n_p: array-like 
+            Contains π-mode radial orders, of length N_π.
+        n_g: array-like
+            Contains γ-mode radial orders, of length N_γ.
+        ν_p: array-like
+            Contains p-mode frequencies, of length N_π.
+        ν_g: array-like
+            Contains g-mode frequencies, of length N_γ.
+        p_L: array-like
+            Parameter vector describing 2D polynomial coefficients for coupling strengths.
+        p_D: array-like
+            parameter vector describing 2D polynomial coefficients for overlap integrals.
+
+        Returns
+        -------
+        L : array-like
+            Coupling matrix of shape N_π+N_γ.
+        D : array-like
+            Coupling matrix of shape N_π+N_γ.
+        """
 
         assert len(n_p) == len(nu_p) and len(n_g) == len(nu_g)
 
@@ -380,6 +428,23 @@ class reggae():
 
         Note that this differs by 4π from some other definitions; this is for consistency
         with GYRE. Overall constant factors shouldn't really matter in any case.
+
+        Parameters
+        ----------
+        A: array-like
+            Coupling matrix.
+        D: array-like
+            Coupling matrix.
+        N_π: int
+            Number of p-modes 
+        l: int, optional.
+            Angular degree, default is 1.
+        ξr: array-like
+            Radial component of the eigenfunctions, default is None.
+        ξh: array-like
+            Horizontal component of the eigenfunctions, default is None.
+        M: float
+            Stellar mass, default is None.
         """
 
         Λ, U = reggae.eigh(A, D)
@@ -517,7 +582,21 @@ class reggae():
         """ Select relevant g-mode radial orders.
 
         Based on prior estimates for period spacing and g-mode phase offset, computes
-        the g-mode radial orders that are expected to be relevant 
+        the g-mode radial orders that are expected to be relevant in the sampling.
+
+        Parameters
+        ----------
+        numax: float
+            numax of the star
+        freq_lims: list
+            List of lower and upper frequency limits to consider.
+        dPi0_lims: list
+            List of lower and upper limits of the period spacing to consider.
+        eps_lims: list
+            List of lower and upper limits of the g-mode phase offset to consider.
+        max_N2: float
+            The maximum of the Brunt-Vaisala frequency, used to define the fundamental
+            period offset.
         """
         init_n_g = np.arange(10000)[::-1] + 1
 
