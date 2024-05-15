@@ -1,8 +1,11 @@
 numpy >= 1.17.0
 matplotlib>=1.5.3
 lightkurve>=2.0.0
-pbjam
+pbjam>=1.0.3
 astropy
 dynesty
 dill
 jax
+jaxlib
+yabox
+pyqt6
