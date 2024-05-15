@@ -44,9 +44,17 @@ In addition to a `DipoleStar` class (analogous to `star` in `pbjam`), we provide
 
 ![Screenshot of the GUI in operation, showing frequency and period-échelle power diagrams](screenshots/echelle.png)
 
-## Contributors
+## Contributing
+
+Reggae is currently developed by the following team:
 
 - Joel Ong (Mode frequency generative model + GUI)
 - Martin B. Nielsen (PSD model)
 - Guy R. Davies
 - Emily Hatt
+
+We welcome contributions from the community. We expect contributors to adhere to our [code of conduct](CODE_OF_CONDUCT.md).
+
+## License
+
+Reggae is released under the MIT license.
