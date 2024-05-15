@@ -6,6 +6,18 @@ Since the primary samples of the PLATO mission consist mainly of main-sequence a
 
 We found Reggae very helpful both for these tuning and visualisation tasks, and also as a didactic aid to understanding the dipole mixed-mode parameters. As such, we release it publicly in advance of the second `PBjam` version, as we believe the community will benefit from access to such a visualisation tool. This will also assist future users of `PBjam` in devising ad-hoc prior constraints on the mixed-mode parameters, should they wish not to rely on the prior included with it.
 
+## Installation
+
+`reggae` requires PyQT to be installed, and is not yet available on PyPI. We recommend you install it from a local copy of the repository. For example:
+
+```
+git clone git@github.com:darthoctopus/reggae.git
+cd reggae
+pip install -e .
+```
+
+Please check [here](https://github.com/darthoctopus/reggae/blob/master/docs/installation.md) for more detailed installation instructions.
+
 ## Generative model for mode frequencies
 
 We implement a generative model for dipole gravitoacoustic mixed modes using the parameterisation of Ong & Basu (2020). At present, the frequency-dependent coupling strength is described with two parameters (one for each of the two matrices entering into the parameterisation), with a conversion to the asymptotic $q$ provided by an expression in Ong & Gehan (2023). This expression is in turn used to generate stretched echelle power plots for diagnostic purposes.
