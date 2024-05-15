@@ -6,14 +6,14 @@ To install reggae do the following:
 cd path/to/my/repos
 git clone https://gitlab.com/darthoctopus/zeta.git
 cd zeta
-python setup.py install
+pip install -e .
 ```
 - Now clone the `Reggae` repository and install it by doing the following
 ```
 cd path/to/my/repos
 git clone https://github.com/darthoctopus/reggae.git
 cd reggae
-python setup.py install
+pip install -e .
 ```
 That should be it!
 
