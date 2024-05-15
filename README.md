@@ -8,15 +8,17 @@ We found Reggae very helpful both for these tuning and visualisation tasks, and 
 
 ## Installation
 
-`reggae` requires PyQT to be installed, and is not yet available on PyPI. We recommend you install it from a local copy of the repository. For example:
+`reggae` is not yet available on PyPI. We recommend you install it in a virtual environment, from a local copy of the repository. For example:
 
 ```
 git clone git@github.com:darthoctopus/reggae.git
 cd reggae
+python -m venv venv
+. venv/bin/activate
 pip install -e .
 ```
 
-Please check [here](https://github.com/darthoctopus/reggae/blob/master/docs/installation.md) for more detailed installation instructions.
+Please check [here](https://github.com/darthoctopus/reggae/blob/master/docs/installation.md) for more detailed installation and troubleshooting instructions.
 
 ## Generative model for mode frequencies
 
