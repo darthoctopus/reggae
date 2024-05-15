@@ -27,3 +27,10 @@ pip install -e .
 ```
 That should be it!
 
+# Testing things work
+To check that everyone works you can try running Reggae with an example provided in the test/jamie directory
+```
+python -m path/to/my/repos/reggae/test/jamie/test.py
+```
+This should open up an UI featuring the example data.
+
