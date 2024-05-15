@@ -20,6 +20,16 @@ pip install -e .
 
 Please check [here](https://github.com/darthoctopus/reggae/blob/master/docs/installation.md) for more detailed installation and troubleshooting instructions.
 
+## Usage
+
+Reggae may be operated in many ways. It may be easiest to run the GUI with the command
+
+```
+python -m reggae
+```
+
+For more detailed usage instructions, please refer to our [documentation](https://github.com/darthoctopus/reggae/blob/master/docs/usage.md).
+
 ## Generative model for mode frequencies
 
 We implement a generative model for dipole gravitoacoustic mixed modes using the parameterisation of Ong & Basu (2020). At present, the frequency-dependent coupling strength is described with two parameters (one for each of the two matrices entering into the parameterisation), with a conversion to the asymptotic $q$ provided by an expression in Ong & Gehan (2023). This expression is in turn used to generate stretched echelle power plots for diagnostic purposes.
