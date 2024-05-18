@@ -50,26 +50,18 @@ class DipoleStar:
             Instance of the pbjam.star or pbjam.modeID.modeIDsampler classes. 
         """
 
-        if isinstance(star, pbjam.star):
+        pbjam_model = klass.make_pbjam_model(star)
+        self = klass(np.array(star.s / pbjam_model), star.f)
+        self.s_raw = np.array(star.s)
 
-            # divide out l = 0,2 modes
-            pbjam_model = klass.make_pbjam_model(star)
+        if hasattr(star, 'modeID') and isinstance(star, pbjam.modeID.modeIDsampler):
 
-            self = klass(np.array(star.s / pbjam_model), star.f)
-            self.s_raw = np.array(star.s)
+            self.pg = SNRPeriodogram(self.f * u.uHz, u.Quantity(self.s))
+
+        else:
 
             self.pg = star.pg
             self.pg.power = u.Quantity(self.s)
-
-        elif isinstance(star, pbjam.modeID.modeIDsampler):
-
-            # divide out only background
-            pbjam_model = klass.make_pbjam_model(star)
-
-            self = klass(np.array(star.s / pbjam_model), star.f)
-            self.s_raw = self.s
-
-            self.pg = SNRPeriodogram(self.f * u.uHz, u.Quantity(self.s))
 
         # theta_asy
 
@@ -194,6 +186,9 @@ class DipoleStar:
         ----------
         theta: jnp.array
             Array of model parameters
+
+        Returns
+        -------
         lnlike: float
             log-likelihood at theta.
         """
@@ -274,29 +269,7 @@ class DipoleStar:
             ThetaAsy class instance, containing l=2,0 and background model parameters.
         """
 
-        if isinstance(star, pbjam.star):
-            nu_0 = np.array([row['mean'] for label, row in star.peakbag.summary.iterrows() if 'l0' in label])
-
-            nu_2 = np.array([row['mean'] for label, row in star.peakbag.summary.iterrows() if 'l2' in label])
-            
-            d02 = np.median(nu_0 - nu_2)
-            
-            dnu = np.median(np.diff(nu_0))
-
-            mean = lambda x: float(star.asy_fit.summary.loc[x]['mean'])
-            
-            return nu_0, nu_2, ThetaAsy(
-                    log_numax=mean('numax'),
-                    log_dnu=np.log10(dnu),
-                    eps=mean('eps'),
-                    log_d02=np.log10(d02),
-                    log_alpha=mean('alpha'),
-                    log_hmax=mean('env_height'),
-                    log_env_width=mean('env_width'),
-                    log_mode_width=mean('mode_width')
-                )
-
-        elif isinstance(star, pbjam.modeID.modeIDsampler):
+        if hasattr(star, 'modeID') and isinstance(star, pbjam.modeID.modeIDsampler):
             s = lambda x: float(star.result['summary'][x][0])
             
             θ = ThetaAsy(
@@ -315,6 +288,28 @@ class DipoleStar:
             nu_2 = nu_0 - s('d02')
             
             return nu_0, nu_2, θ
+
+        else:
+            nu_0 = np.array([row['mean'] for label, row in star.peakbag.summary.iterrows() if 'l0' in label])
+
+            nu_2 = np.array([row['mean'] for label, row in star.peakbag.summary.iterrows() if 'l2' in label])
+            
+            d02 = np.median(nu_0 - nu_2)
+            
+            dnu = np.median(np.diff(nu_0))
+
+            mean = lambda x: float(star.asy_fit.summary.loc[x]['mean'])
+            
+            return nu_0, nu_2, ThetaAsy(
+                    log_numax=mean('numax'),
+                    log_dnu=np.log10(dnu),
+                    eps=mean('eps_p'),
+                    log_d02=np.log10(d02),
+                    log_alpha=mean('alpha_p'),
+                    log_hmax=mean('env_height'),
+                    log_env_width=mean('env_width'),
+                    log_mode_width=mean('mode_width')
+                )
 
     @staticmethod
     def make_pbjam_model(star, n_samples=50):
@@ -338,7 +333,10 @@ class DipoleStar:
             Spectrum model.
         """
 
-        if isinstance(star, pbjam.star): # PBjam star object
+        if hasattr(star, 'modeID') and isinstance(star, pbjam.modeID.modeIDsampler):
+            return star.result['background']
+
+        else: # PBjam star object
             peakbag = star.peakbag
 
             freq = star.pg.frequency.value
@@ -359,9 +357,6 @@ class DipoleStar:
                 acc[i] = np.sum(z - bg[:, None], axis=0) +1
 
             return np.mean(acc, axis=0)
-
-        elif isinstance(star, pbjam.modeID.modeIDsampler):
-            return star.result['background']
 
     # optimisation tasks
 

@@ -13,7 +13,6 @@ from matplotlib.backends.backend_qtagg import (
 from matplotlib.figure import Figure
 
 from astropy import units as u
-from pbjam import star as PbjamStar
 from corner import corner
 
 from . import DipoleStar
@@ -67,7 +66,7 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
 
         if isinstance(input, DipoleStar):
             self.load_reggae(reggae=input)
-        elif isinstance(input, PbjamStar):
+        else:
             self.load_pbjam(pbjam=input)
 
         if session is not None:
