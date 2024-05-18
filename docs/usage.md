@@ -77,3 +77,13 @@ The matrix formalism also requires a set of g-mode frequencies to be specified, 
 The pure p-mode frequency for each $n_p$ is also computed as $\nu_{1, n_p} = \nu_{0, n_p} - {1 \over 3}\delta_nu_{02, n_p} + \Delta\nu({1 \over 2} + d_{01})$, where $\nu_{0, n_p}$ is the radial-mode frequency at that radial order, $\Delta\nu$ is the asymptotic large separation, and $\delta\nu_{02, n_p}$ is the local small separation. The user may opt to specify whether `pbjam` asymptotic or fitted values for the even-degree p-mode frequencies are used in this expression.
 
 Finally, there are controls for various optimisation and sampling schemes.
+
+## Toolbar: I/O Operations
+
+The right toolbar contains text buttons performing file I/O operations. These are:
+
+- Import PBJam: Load a pickle file containing the results of a PBJam run (i.e. a `pbjam.star` object), and populate the user interface.
+- Load Reggae: Load a pickle file containing an existing {class}`~reggae.dipolestar.DipoleStar` object, and populate the user interface.
+- Dump Session: Save the current state of the GUI to a pickle file.
+- Load Session: Load a saved GUI state from a pickle file.
+- Reset: Reset the currently-running {class}`~reggae.qtconsole.ReggaeDebugWindow`.
