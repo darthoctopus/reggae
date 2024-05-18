@@ -146,19 +146,21 @@ class DipoleStar:
         return jnp.concatenate((θ_reg, norm))
 
     @partial(jax.jit, static_argnums=(0,))
-    def inv_ptform(self, norm):
+    def inv_ptform(self, θ_reg, norm):
         """  Turns θ_reg object into coordinates on the unit cube
 
         Parameters
         ----------
-        norm: jnp.array
+        θ_reg: ThetaReg object or array-like
             Point location in model parameters space.
+        norm: jnp.array
+            Normalisation
         
         Returns: jnp.array
             Point location in the unit hypercube.
         """
 
-        u_reg = ThetaReg.inv_prior_transform(u[:ThetaReg.dims], bounds=self.bounds)
+        u_reg = ThetaReg.inv_prior_transform(θ_reg, bounds=self.bounds)
         
         u_norm = jnp.array([(norm - self.bounds[-1][0]) / (self.bounds[-1][1] - self.bounds[-1][0])])
         
