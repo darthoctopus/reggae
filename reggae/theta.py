@@ -55,7 +55,7 @@ class ThetaReg:
     def prior_transform(u, bounds=None):
         """ Prior transform for inverse sampling
 
-        Evalues the ppf (quantile function) given a set of quantile values u
+        Evaluates the ppf (quantile function) given a set of quantile values u
         drawn from the n-dimensional hypercube. 
 
         Parameters
@@ -80,16 +80,15 @@ class ThetaReg:
 
     @staticmethod
     def inv_prior_transform(θ, bounds=None):
-        """ Prior transform for inverse sampling
+        """ Inverse prior transform
 
-        Evalues the ppf (quantile function) given a set of quantile values u
-        drawn from the n-dimensional hypercube. 
+        Evaluates the point u in the unit hypercube associated with an array
+        of values describing a θ_reg object.
 
         Parameters
         ----------
-        u : np.array
-            Array of values between 0 and 1 drawn uniformly from the 
-            n-dimensional hypercube.
+        θ : np.array
+            Array of values for the fields of θ_reg.
         bounds : np.array
             Array of bounds for the distributions in case they need to be
             truncated.
@@ -97,6 +96,10 @@ class ThetaReg:
         
         if bounds is None:
             bounds = ThetaReg.bounds
+
+        if isinstance(θ, ThetaReg):
+            θ = astuple(θ)
+
         x = jnp.array([(ξ - a) / (b - a) for (a, b), ξ in zip(bounds, θ)])
         x[1] = scipy.stats.beta.cdf((θ[1] - bounds[1][0]) / bounds[1][1], 1, 2)
         x[2] = scipy.stats.norm.cdf((θ[2] - bounds[2][0]) / bounds[2][1])
