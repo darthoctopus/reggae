@@ -76,7 +76,7 @@ class PSDModel(reggae, asymptotic):
         
         return theta_asy.nu_0(self.n_orders)
 
-    def get_nu_2(self,):
+    def get_nu_2(self, theta_asy):
         """ Get the l=2 mode frequencies
 
         Returns
@@ -87,6 +87,8 @@ class PSDModel(reggae, asymptotic):
 
         if self.nu_2 is not None:
             return self.nu_2
+
+        # TODO: return something if self.nu_2 is None
 
     def get_d02(self, theta_asy):
         """ Compute the l=0,2 separation
@@ -99,10 +101,10 @@ class PSDModel(reggae, asymptotic):
         Returns
         -------
         d02: float
-            Array of l=0 mode frequencies
+            Array of local frequency differences between l=0 and l=2 modes
         """
 
-        if self.nu_2 is not None and self.nu_0 is not None: # TODO Aren't these checks redundant?
+        if self.nu_2 is not None and self.nu_0 is not None: # use fitted mode freqs if available
             return self.get_nu_0(None) - self.get_nu_2(None)
         
         return 10.**(theta_asy.log_d02)
@@ -137,7 +139,7 @@ class PSDModel(reggae, asymptotic):
         
         n_p = theta_asy.n_p(self.n_orders)
 
-        return super().getl1(self.n_g, nu_0, numax, dnu, d02, alpha, nmax, n_p,
+        return super().getl1(self.n_g, nu_0, numax, dnu, d02, n_p,
                              theta_reg.d01, theta_reg.dPi0, theta_reg.p_L, 
                              theta_reg.p_D, theta_reg.epsilon_g, theta_reg.alpha_g, 
                              **kwargs)
