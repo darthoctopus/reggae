@@ -9,3 +9,4 @@ jax
 jaxlib
 yabox
 pyqt6
+zeta @ git+https://gitlab.com/darthoctopus/zeta.git
