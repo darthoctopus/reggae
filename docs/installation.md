@@ -1,5 +1,6 @@
 # Installation
-Before installing Reggae we strongly recommend you use a virtual environment. The simplest way to set one up the Python venv module:
+
+**We presently only officially support installating Reggae under Python 3.10 and below**. Before installing Reggae we strongly recommend you use a virtual environment. The simplest way to set one up using the Python `venv` module:
 ```
 python -m /path/to/new/virtual/environment
 ``` 
@@ -27,7 +28,8 @@ pip install -e .
 ```
 That should be it!
 
-# Testing things work
+## Testing things work
+
 To check that everyone works you can try running Reggae with an example provided in the test/jamie directory
 ```
 cd path/to/my/repos/reggae/test/jamie
@@ -35,3 +37,8 @@ python test.py
 ```
 This should open up an UI featuring the example data.
 
+## Installation FAQs
+
+- What do I need to install in order to accelerate these calculations on my GPU?
+
+Please check that your OS is on `jax`'s supported list of systems and hardware configurations, which can be found [here](https://jax.readthedocs.io/en/latest/installation.html#supported-platforms). In summary, while performing `jax` calculations on the CPU is supported on all platforms, GPU acceleration is only available on limited combinations of hardware and operating systems.
