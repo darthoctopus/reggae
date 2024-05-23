@@ -1,6 +1,6 @@
 # Installation
 
-**We presently only officially support installating Reggae under Python 3.10 and below**. Before installing Reggae we strongly recommend you use a virtual environment. The simplest way to set one up is using the Python `venv` module:
+**We presently only officially support installing Reggae under Python 3.10 and below**. Before installing Reggae we strongly recommend you use a virtual environment. The simplest way to set one up is using the Python `venv` module:
 ```
 python -m /path/to/new/virtual/environment
 ``` 
