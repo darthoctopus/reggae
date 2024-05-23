@@ -109,6 +109,7 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         layout.addWidget(ps_canvas)
         layout.addWidget(NavigationToolbar(ps_canvas, self))
         self._ax['ps'] = ps_canvas.figure.subplots()
+        ps_canvas.figure.set_tight_layout(True)
 
         ## χ2 tab: local cost-function landscape (for local optimisation)
 
@@ -118,6 +119,7 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
 
         for i, field in enumerate(FIELDS):
             chi2_canvas = FigureCanvas(Figure())
+            chi2_canvas.figure.set_tight_layout(True)
             layout.addWidget(chi2_canvas, i//3, i%3)
             self._ax[f'chi2_{i}'] = chi2_canvas.figure.subplots()
             self._ax[f'chi2_{i}'].set_xlabel(DipoleStar.labels[i])
@@ -129,12 +131,14 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         left.addTab(widget, "Échelle Diagrams")
 
         canvas = FigureCanvas(Figure())
+        canvas.figure.set_tight_layout(True)
         layout.addWidget(NavigationToolbar(canvas, self))
         layout.addWidget(canvas)
         self._ax['echelle'] = canvas.figure.subplots()
         self._echelle_points = {}
 
         canvas = FigureCanvas(Figure())
+        canvas.figure.set_tight_layout(True)
         layout.addWidget(canvas)
         layout.addWidget(NavigationToolbar(canvas, self))
         self._ax['period_echelle'] = canvas.figure.subplots()
@@ -147,6 +151,7 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         left.addTab(widget, "Posteriors")
 
         canvas = FigureCanvas(Figure())
+        canvas.figure.set_tight_layout(True)
         layout.addWidget(NavigationToolbar(canvas, self))
         layout.addWidget(canvas)
         # this is a FIGURE OBJECT, NOT an Axes object
