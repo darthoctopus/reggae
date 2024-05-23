@@ -4,6 +4,7 @@ import time
 import traceback
 
 import numpy as np
+from scipy.ndimage import gaussian_filter1d
 import dill
 
 import matplotlib.pyplot as plt
@@ -723,21 +724,7 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         ax.legend()
         ax.figure.canvas.draw()
 
-        ax = self._ax['echelle']
-        try:
-            ax.images[-1].colorbar.remove()
-        except IndexError:
-            pass
-        ax.clear()
-        seis = self.reggae.pg.to_seismology() # astropy seismology object
-        numax = 10**self.reggae.theta_asy.log_numax
-        dnu = 10**self.reggae.theta_asy.log_dnu
-        try:
-            ax = seis.plot_echelle(deltanu=dnu * u.uHz, numax=numax * u.uHz, ax=ax)
-            ax.set_aspect('auto')
-        except ImportError:
-            print("Could not draw colourbar without importing different backend")
-        ax.figure.canvas.draw()
+        self.frequency_echelle_power_plot()
 
         ax = self._ax['period_echelle']
         try:
@@ -808,8 +795,41 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
 
         return nu_1
 
+    def frequency_echelle_power_plot(self):
+        '''
+        Generate a frequency-echelle power diagram.
+        '''
+        ax = self._ax['echelle']
+        try:
+            ax.images[-1].colorbar.remove()
+        except IndexError:
+            pass
+        ax.clear()
+
+        θ_asy = self.reggae.theta_asy
+
+        Δν = 10 ** θ_asy.log_dnu
+        νmax = 10 ** θ_asy.log_numax
+        n_orders = self.reggae.l1model.n_orders
+
+        ν_range = (νmax - Δν * (n_orders/2 + 1), νmax + Δν * (n_orders/2 + 1))
+
+        ε_grid = np.linspace(0, 1, 2000)
+        n_grid = np.arange(int(np.floor(ν_range[0]/Δν - 1)), int(np.ceil(ν_range[1]/Δν + 2)))
+
+        ν_grid = Δν * (n_grid[:,None] + ε_grid[None, :])
+        smooth = gaussian_filter1d(self.reggae.s, 3)
+        P_grid = np.interp(ν_grid, self.reggae.f, smooth)
+        ax.pcolormesh(Δν*ε_grid, Δν*n_grid, P_grid, antialiased=True, cmap='Blues',
+            vmin=np.nanpercentile(P_grid, 1), vmax = np.nanmax(P_grid), shading='nearest')
+        ax.set_xlabel(r"$\nu \mod \Delta\nu$")
+        ax.set_ylabel(r"$\nu/\mu$Hz")
+        ax.set_ylim(ν_range[0]-Δν/2, ν_range[1]-Δν/2)
+        ax.figure.canvas.draw()
+
     def period_echelle_power_plot(self):
-        """Generate the period echelle plot
+        """
+        Generate a stretched period-echelle power diagram.
         """
 
         ν_p = self.get_ν_p()
