@@ -894,6 +894,7 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
                 spinboxes = session['spinboxes']
                 bounds = session['bounds']
                 n_g_lims = session['n_g']
+                checkboxes = session.get('checkboxes', {})
 
                 # update GUI
 
@@ -906,6 +907,9 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
 
                 for i, _ in enumerate(['lower', 'upper']):
                     self.n_g_lims[_].setValue(n_g_lims[i])
+
+                for _ in checkboxes:
+                    self.checkboxes[_].setChecked(checkboxes[_])
 
                 self.print(f"Loaded session")
                 self.sync_state()
@@ -993,9 +997,11 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         spinboxes = {_: self.spinboxes[_].value() for _ in self.spinboxes}
         bounds = self.get_bounds()
         n_g = tuple(self.n_g_lims[_].value() for _ in ['lower', 'upper'])
+        checkboxes = {_: self.checkboxes[_].isChecked() for _ in self.checkboxes}
 
         self.write_pickle({
-            'spinboxes': spinboxes, 'bounds': bounds, 'n_g': n_g
+            'spinboxes': spinboxes, 'bounds': bounds, 'n_g': n_g,
+            'checkboxes': checkboxes
             }, 'Save session variables to pickle file')
 
     def dump_reggae(self):
