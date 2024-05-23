@@ -824,7 +824,7 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
             vmin=np.nanpercentile(P_grid, 1), vmax = np.nanmax(P_grid), shading='nearest')
         ax.set_xlabel(r"$\nu \mod \Delta\nu$")
         ax.set_ylabel(r"$\nu/\mu$Hz")
-        ax.set_ylim(ν_range[0]-Δν/2, ν_range[1]-Δν/2)
+        ax.set_ylim(ν_range[0], ν_range[1])
         ax.figure.canvas.draw()
 
     def period_echelle_power_plot(self):
