@@ -101,7 +101,6 @@ class DipoleStar:
             sampler = getattr(self, "sampler", None)
 
         if sampler is not None:
-            sampler = self.sampler
             self.DYresult = sampler.results
             samples = self.DYresult.samples
             weights = np.exp(self.DYresult.logwt - self.DYresult.logz[-1])
