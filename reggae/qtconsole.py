@@ -827,7 +827,7 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
         P_grid = np.interp(ν_grid, self.reggae.f, smooth)
         ax.pcolormesh(Δν*ε_grid, Δν*n_grid, P_grid, antialiased=True, cmap='Blues',
             vmin=np.nanpercentile(P_grid, 1), vmax = np.nanmax(P_grid), shading='nearest')
-        ax.set_xlabel(r"$\nu \mod \Delta\nu$")
+        ax.set_xlabel(r"$\nu$ mod $\Delta\nu/\mu$Hz")
         ax.set_ylabel(r"$\nu/\mu$Hz")
         ax.set_ylim(ν_range[0], ν_range[1])
         ax.figure.canvas.draw()
