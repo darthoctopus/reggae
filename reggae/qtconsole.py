@@ -23,7 +23,7 @@ from .reggae import reggae, UNITS
 from zeta.utils import α_to_q
 from zeta.plots import period_echelle_power_plot, make_τ
 
-FIELDS = list(ThetaReg.__match_args__) + ['norm']
+FIELDS = list(ThetaReg.__dataclass_fields__.keys()) + ['norm']
 BOUNDS = ThetaReg.bounds + [[20, 100]]
 
 STYLE = {
