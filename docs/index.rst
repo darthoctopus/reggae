@@ -12,7 +12,6 @@ Welcome to reggae's documentation!
 
    installation
    usage
-   api
 
 Indices and tables
 ==================
