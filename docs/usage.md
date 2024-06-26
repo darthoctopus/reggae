@@ -19,7 +19,7 @@ Later steps in the fitting procedure, using different optimisation schemes, may 
 
 ### $\chi^2$ Landscape
 
-![Left Panel 2: $\chi^2$ Landscape](images/χ2.png)
+![Left Panel 2: $\chi^2$ Landscape](images/chi2.png)
 
 This panel displays the values of $\chi^2 = -\log \mathcal{L}$ as a function of each of the optimisation parameters, holding the others constant at their current values, should the user initiate a parameter sweep (see Right Panel 2 below).
 
@@ -45,7 +45,7 @@ Reggae is intended to permit the user to derive estimates of parameters describi
 
 ### Manual Tuning
 
-![Right Panel 1: Manual Tuning](images/θ.png)
+![Right Panel 1: Manual Tuning](images/theta.png)
 
 This panel allows the user to manually fine-tune the numerical values of a set of dipole-mode parameters. `pbjam` will use a generative model for dipole gravitoacoustic mixed modes using the parameterisation of Ong & Basu (2020), with the frequency-dependent coupling strength described with two parameters (one for each of the two matrices entering into the parameterisation). The full set of parameters in the model, $\theta_\text{reggae}$, is thus:
 
