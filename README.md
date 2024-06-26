@@ -1,6 +1,6 @@
 # Reggae: Dipole modes from `PBjam`
 
-[![https://readthedocs.org/projects/pb-reggae/badge/?version=latest](readthedocs status)](https://pb-reggae.readthedocs.io/en/latest/?badge=latest)
+<a href="https://pb-reggae.readthedocs.io/en/latest/?badge=latest"><img src="https://readthedocs.org/projects/pb-reggae/badge/?version=latest" alt="readthedocs status" /></a>
 
 Reggae is a diagnostic tool for generating optimal parameters describing dipole mixed modes under the nonasymptotic matrix-coupling scheme of [Ong & Basu (2020)](https://ui.adsabs.harvard.edu/abs/2020ApJ...898..127O/abstract) used in the second release of [PBjam](https://github.com/grd349/PBjam) (see [Nielsen et al. 2021](https://ui.adsabs.harvard.edu/abs/2021AJ....161...62N/abstract)).
 
