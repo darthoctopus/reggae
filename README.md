@@ -65,7 +65,10 @@ Reggae is currently developed by the following team:
 - Guy R. Davies
 - Emily Hatt
 
-We welcome contributions from the community. We expect contributors to adhere to our [code of conduct](CODE_OF_CONDUCT.md).
+We welcome contributions from the community. We expect contributors to adhere to our [code of conduct](CODE_OF_CONDUCT.md). Easy ways to get started include:
+
+- Finding bugs in our code — please open GitHub issues for these.
+- Implementing feature suggestions — we welcome pull requests!
 
 ## License
 
