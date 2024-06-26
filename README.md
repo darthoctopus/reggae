@@ -30,7 +30,7 @@ Reggae may be operated in many ways. It may be easiest to run the GUI with the c
 python -m reggae
 ```
 
-For more detailed usage instructions, please refer to our [documentation](https://pb-reggae.readthedocs.io/en/latest/installation.html).
+For more detailed usage instructions, please refer to our [documentation](https://pb-reggae.readthedocs.io/en/latest/usage.html).
 
 ## Generative model for mode frequencies
 
