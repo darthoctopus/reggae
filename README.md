@@ -1,5 +1,7 @@
 # Reggae: Dipole modes from `PBjam`
 
+[![https://readthedocs.org/projects/pb-reggae/badge/?version=latest](readthedocs status)](https://pb-reggae.readthedocs.io/en/latest/?badge=latest)
+
 Reggae is a diagnostic tool for generating optimal parameters describing dipole mixed modes under the nonasymptotic matrix-coupling scheme of [Ong & Basu (2020)](https://ui.adsabs.harvard.edu/abs/2020ApJ...898..127O/abstract) used in the second release of [PBjam](https://github.com/grd349/PBjam) (see [Nielsen et al. 2021](https://ui.adsabs.harvard.edu/abs/2021AJ....161...62N/abstract)).
 
 Since the primary samples of the [PLATO](https://platomission.com/) mission consist mainly of main-sequence and subgiant stars, PBjam implements a parameterisation of dipole modes suitable to these stars, outside the red-giant "asymptotic" regime. Reggae assists in the task of manually fine-tuning the dipole-mode model, and checking the quality of both our initial guesses and fitted solutions. An important part of this tuning is visual assessment of how well the data matches posterior samples for these parameters. Such asteroseismic visualisations often use the échelle power diagram near $\nu_{\mathrm{max}}$ as a diagnostic tool, with clearly-defined ridges emerging on this diagram for p-modes, such as in main-sequence stars.
@@ -18,7 +20,7 @@ python -m venv venv
 pip install -e .
 ```
 
-Please check [here](https://github.com/darthoctopus/reggae/blob/master/docs/installation.md) for more detailed installation and troubleshooting instructions.
+Please check [our documentation](https://pb-reggae.readthedocs.io/en/latest/installation.html) for more detailed installation and troubleshooting instructions.
 
 ## Usage
 
@@ -28,7 +30,7 @@ Reggae may be operated in many ways. It may be easiest to run the GUI with the c
 python -m reggae
 ```
 
-For more detailed usage instructions, please refer to our [documentation](https://github.com/darthoctopus/reggae/blob/master/docs/usage.md).
+For more detailed usage instructions, please refer to our [documentation](https://pb-reggae.readthedocs.io/en/latest/installation.html).
 
 ## Generative model for mode frequencies
 
