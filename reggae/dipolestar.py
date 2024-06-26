@@ -312,7 +312,8 @@ class DipoleStar:
 
     @staticmethod
     def make_pbjam_model(star, n_samples=50):
-        """ Construct a spectrum model from PBjam output
+        """
+        Construct a spectrum model from PBjam output
 
         Takes either a pbjam.star or pbjam.modeID.modeIDsampler object from a previous
         PBjam run. This is used to construct a residual spectrum.
@@ -326,8 +327,9 @@ class DipoleStar:
             Either a pbjam.star or pbjam.modeID.modeIDsampler object.
         n_samples: int, optional
             Number of samples to use to construct the mean model. Default is 50.
-        
-        Returns:
+
+        Returns
+        -------
         mod: jnp.array
             Spectrum model.
         """

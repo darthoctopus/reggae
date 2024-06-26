@@ -515,7 +515,6 @@ class reggae():
     @jax.jit
     def eigh(a, b):
         """
-
         From https://jackd.github.io/posts/generalized-eig-jvp/
 
         Compute the solution to the symmetrized generalized eigenvalue problem.
@@ -538,14 +537,15 @@ class reggae():
         inefficient way of doing it. Future implementations should wrap cuda primitives.
         This implementation is provided primarily as a means to test `eigh_jvp_rule`.
 
-        Args:
-            a: [n, n] float self-adjoint matrix (i.e. conj(transpose(a)) == a)
-            b: [n, n] float self-adjoint matrix (i.e. conj(transpose(b)) == b)
+        Parameters
+        ----------
+        a: [n, n] float self-adjoint matrix (i.e. conj(transpose(a)) == a)
+        b: [n, n] float self-adjoint matrix (i.e. conj(transpose(b)) == b)
 
-        Returns:
-            v: eigenvalues of the generalized problem in ascending order.
-            w: eigenvectors of the generalized problem, normalized such that
-                w.H @ b @ w = I.
+        Returns
+        -------
+        v: eigenvalues of the generalized problem in ascending order.
+        w: eigenvectors of the generalized problem, normalized such that w.H @ b @ w = I.
         """
         a = reggae.symmetrize(a)
         b = reggae.symmetrize(b)
