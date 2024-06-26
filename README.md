@@ -2,11 +2,15 @@
 
 <a href="https://pb-reggae.readthedocs.io/en/latest/?badge=latest"><img src="https://readthedocs.org/projects/pb-reggae/badge/?version=latest" alt="readthedocs status" /></a>
 
+<!-- index.rst blurb start -->
+
 Reggae is a diagnostic tool for generating optimal parameters describing dipole mixed modes under the nonasymptotic matrix-coupling scheme of [Ong & Basu (2020)](https://ui.adsabs.harvard.edu/abs/2020ApJ...898..127O/abstract) used in the second release of [PBjam](https://github.com/grd349/PBjam) (see [Nielsen et al. 2021](https://ui.adsabs.harvard.edu/abs/2021AJ....161...62N/abstract)).
 
 Since the primary samples of the [PLATO](https://platomission.com/) mission consist mainly of main-sequence and subgiant stars, PBjam implements a parameterisation of dipole modes suitable to these stars, outside the red-giant "asymptotic" regime. Reggae assists in the task of manually fine-tuning the dipole-mode model, and checking the quality of both our initial guesses and fitted solutions. An important part of this tuning is visual assessment of how well the data matches posterior samples for these parameters. Such asteroseismic visualisations often use the échelle power diagram near $\nu_{\mathrm{max}}$ as a diagnostic tool, with clearly-defined ridges emerging on this diagram for p-modes, such as in main-sequence stars.
 
 We found Reggae very helpful both for these tuning and visualisation tasks, and also as a didactic aid to understanding the dipole mixed-mode parameters. As such, we release it publicly in advance of the second PBjam version, as we believe the community will benefit from access to such a visualisation tool. This will also assist future users of PBjam in devising ad-hoc prior constraints on the mixed-mode parameters, should they wish not to rely on the prior included with it.
+
+<!-- index.rst blurb end -->
 
 ## Installation
 
@@ -34,6 +38,8 @@ For more detailed usage instructions, please refer to our [documentation](https:
 
 ## Generative model for mode frequencies
 
+<!-- index.rst science start -->
+
 We implement a generative model for dipole gravitoacoustic mixed modes using the parameterisation of [Ong & Basu (2020)](https://ui.adsabs.harvard.edu/abs/2020ApJ...898..127O/abstract). At present, the frequency-dependent coupling strength is described with two parameters (one for each of the two matrices entering into the parameterisation), with a conversion to the asymptotic $q$ provided by an expression in [Ong & Gehan (2023)](https://ui.adsabs.harvard.edu/abs/2023ApJ...946...92O/abstract). This expression is in turn used to generate stretched echelle power plots for diagnostic purposes.
 
 In full, the generative model accepts the following parameters:
@@ -45,6 +51,8 @@ In full, the generative model accepts the following parameters:
 - $\delta_{01}$, an additional phase offset for the dipole p-modes relative to the asymptotic solution found by pbjam.
 - $\alpha_g$, a curvature parameter for the g-modes (mirroring that of the p-modes in pbjam's asymptotic parameterisation).
 - $i$, the inclination of the rotational axis.
+
+<!-- index.rst science end -->
 
 ## PSD Model
 
@@ -58,6 +66,8 @@ In addition to a `DipoleStar` class (analogous to `star` in `pbjam`), we provide
 
 ## Contributing
 
+<!-- index.rst contributing start -->
+
 Reggae is currently developed by the following team:
 
 - Joel Ong (Mode frequency generative model + GUI)
@@ -65,10 +75,14 @@ Reggae is currently developed by the following team:
 - Guy R. Davies
 - Emily Hatt
 
-We welcome contributions from the community. We expect contributors to adhere to our [code of conduct](CODE_OF_CONDUCT.md). Easy ways to get started include:
+We welcome contributions from the community. Easy ways to get started include:
 
 - Finding bugs in our code — please open GitHub issues for these.
 - Implementing feature suggestions — we welcome pull requests!
+
+<!-- index.rst contributing end -->
+
+We expect contributors to adhere to our [code of conduct](CODE_OF_CONDUCT.md).
 
 ## License
 

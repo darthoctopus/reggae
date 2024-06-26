@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to reggae's documentation!
+Reggae: Dipole Modes from PBJam
 ==================================
 
 .. toctree::
@@ -13,8 +13,33 @@ Welcome to reggae's documentation!
    installation
    usage
 
-Indices and tables
-==================
+.. include:: ../README.md
+   :parser: myst_parser.sphinx_
+   :start-after: <!-- index.rst blurb start -->
+   :end-before: <!-- index.rst blurb end -->
+
+Mode Identification
+-------------------
+
+The key task that Reggae is intended to perform is mode identification: specifically, assigning mixing fractions and radial orders to dipole mixed gravitoacoustic modes.
+
+.. include:: ../README.md
+   :parser: myst_parser.sphinx_
+   :start-after: <!-- index.rst science start -->
+   :end-before: <!-- index.rst science end -->
+
+This description of the mixed mode frequencies is used to construct models of the power spectral density, from which constraints on its parameters may be derived. For the purpose of assisting in this task, we moreover implement a GUI console.
+
+Contributing
+------------
+
+.. include:: ../README.md
+   :parser: myst_parser.sphinx_
+   :start-after: <!-- index.rst contributing start -->
+   :end-before: <!-- index.rst contributing end -->
+
+Indices
+-------
 
 * :ref:`genindex`
 * :ref:`modindex`
