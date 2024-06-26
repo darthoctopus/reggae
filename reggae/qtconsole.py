@@ -71,7 +71,7 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
             self.load_pbjam(pbjam=input)
 
         if session is not None:
-            self.load(session)
+            self.load(session=session)
 
         self.show()
         self.activateWindow()
@@ -889,7 +889,7 @@ class ReggaeDebugWindow(QtWidgets.QMainWindow):
             self.reggae.l1model.nu_2 = None
 
     def load(self, *, session=None):
-        """Load PBjam session output
+        """Load GUI session output
         """
 
         if session is None:
