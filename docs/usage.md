@@ -1,4 +1,4 @@
-# Usage
+# GUI Usage
 
 Reggae is intended to be operated primarily through its GUI, although many GUI actions correspond to methods of the {class}`~reggae.dipolestar.DipoleStar` class. There are a couple of ways to launch the GUI:
 

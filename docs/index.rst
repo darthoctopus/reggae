@@ -12,6 +12,7 @@ Reggae: Dipole Modes from PBJam
 
    installation
    usage
+   quickstart
 
 .. include:: ../README.md
    :parser: myst_parser.sphinx_
