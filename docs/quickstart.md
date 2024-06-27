@@ -27,7 +27,7 @@ Once the {class}`~reggae.dipolestar.DipoleStar` object has been loaded into a GU
 
 - There is a tight empirical $\Delta\nu$-$\Delta\Pi_1$ sequence for first-ascent red giant stars; see e.g. fig. 1 of [Deheuvels et al. 2022](https://ui.adsabs.harvard.edu/abs/2022A%26A...659A.106D/abstract). More evolved (e.g. core-helium-burning aka CHeB) stars lie on a different, and less well-understood, part of this diagram (e.g. fig. 6 of [Rui et al. 2021](https://ui.adsabs.harvard.edu/abs/2021MNRAS.508.1618R/abstract)). If one can identify the kind of red giant one is dealing with, one may convert a putative value of $\Delta\Pi_1$ to an initial guess for `DPi0` as
 
-$$\texttt{DPi0} = \sqrt{2}(\Delta\Pi_1/\mathrm{s}) / 125$$
+$$\texttt{DPi0} = \sqrt{2}(\Delta\Pi_1/125\ \mathrm{s})$$
 
 - For first-ascent red giants, there is a known, if rough, empirical relation between the coupling strength $q$ and the quantity $\mathcal{N}_1 = \Delta\nu / \nu_\text{max}^2 \Delta\Pi_1$. One may find the value of $q$ associated with the current values of $p_L$ and $p_D$ by using the "Auto-q" button on the GUI. More evolved, or anomalous, stars may not respect this relation, and the conversion between $q$ and these matrix parameters is less accurate with strong coupling (mostly CHeB or subgiant stars).
 
@@ -37,7 +37,7 @@ $$\texttt{DPi0} = \sqrt{2}(\Delta\Pi_1/\mathrm{s}) / 125$$
 
 Once initial guesses for these parameters have been supplied to the GUI, we recommend that you first tweak them until the predicted locations of mode frequencies in the echelle-diagram panel line up with the positions of peaks in the actual echelle power diagram. Once this has been achieved, the goodness of fit of the PSD model may be iteratively improved by optimizing the likelihood function in one variable at a time, keeping all the others fixed. We recommend finding a good value of the normalisation factor first before beginning to tweak the others.
 
-When you are satisfied with you manually tuned value of these asymptotic parameters, you may then use more sophisticated techniques (numerical optimisation or nested sampling), which we expose through the GUI if you prefer to operate through it. Alternatively, these commonly-used routines are also implemented as methods of the {class}`~reggae.dipolestar.DipoleStar` object, if you should prefer for long-running tasks to be run in standalone scripts.
+When you are satisfied with your manually tuned values of these asymptotic parameters, you may then use more sophisticated techniques (numerical optimisation or nested sampling), which we expose through the GUI if you prefer to operate through it. Alternatively, these commonly-used routines are also implemented as methods of the {class}`~reggae.dipolestar.DipoleStar` object, if you should prefer for long-running tasks to be run in standalone scripts.
 
 ## Saving Your Work
 
