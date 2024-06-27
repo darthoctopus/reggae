@@ -44,3 +44,21 @@ git clone https://gitlab.com/darthoctopus/zeta.git
 cd zeta
 pip install -e .
 ```
+
+- I am running into core dump errors with missing libraries.
+
+This is an issue we have encountered on linux systems where only X11 GUI sessions are installed. You will need to use your OS's package manager to install certain X11 libraries that may be required by Qt for the GUI to function properly. For example, if you should see the error message
+
+```
+qt.qpa.plugin: From 6.5.0, xcb-cursor0 or libxcb-cursor0 is needed to load the Qt xcb platform plugin.
+qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "" even though it was found.
+This application failed to start because no Qt platform plugin could be initialized. Reinstalling the application may fix this problem.
+```
+
+then (e.g. if you are using Ubuntu) you will need to install additional system packages:
+
+```
+$ sudo apt install libxcb-cursor0
+```
+
+As this specific error message suggests, downgrading to Qt 6.5 (and PyQt 6.5) may be an alternative resolution to this issue. Yet another alternative may be to use a Wayland-based GUI session (and correspondingly a different Qt platform plugin), although this may cause other issues.
