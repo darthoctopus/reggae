@@ -12,6 +12,8 @@ We found Reggae very helpful both for these tuning and visualisation tasks, and 
 
 <!-- index.rst blurb end -->
 
+<a href="https://pb-reggae.readthedocs.io/en/latest/">For more details, please read our documentation here.</a>
+
 ## Installation
 
 `reggae` is not yet available on PyPI. We recommend you install it in a virtual environment, from a local copy of the repository. For example:

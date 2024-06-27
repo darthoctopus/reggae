@@ -4,4 +4,4 @@ This test data set is generated from having run pbjam 1.0.3 on KIC 9267654 (Taya
 
 To bring up the reggae GUI, run the file `test.py`. The best manual parameters obtained from hand-tuning Reggae are stored in `session.pkl`, which can be loaded using the "Load Session" button in the right toolbar. Please see our documentation for more details about the other GUI options.
 
-This test file will load the GUI into the state it was at when the manual fitter decided that the current guesses at the dipole mode parameters were "good enough" to be used for other purposes.
+This test file will load the GUI into the state it was at when the manual fitter decided that the current guesses at the dipole mode parameters were "good enough" to be used for other purposes. You may tweak the current state to see how changing these parameters alters the locations of the predicted mode frequencies used for further mode identification and peak-bagging.
