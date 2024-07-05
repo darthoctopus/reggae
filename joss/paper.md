@@ -22,13 +22,22 @@ affiliations:
  - name: "School of Physics and Astronomy, University of Birmingham, Birmingham B15 2TT, UK"
    index: 3
 bibliography: ./biblio.bib
-date: \today
+submitted_at: '2024-02-07'
 csl-refs: yes
+software_review_url: https://github.com/openjournals/joss-reviews/issues/6588
+software_repository_url: https://github.com/darthoctopus/reggae
+editor:
+  name: Daniel Foreman-Mackey
+  url: https://github.com/dfm
+  orcid: 0000-0002-9328-5652
+reviewers:
+  - sblunt
+  - sybreton
 ---
 
 # Summary
 
-`PBjam` [@{2021AJ....161...62N}] is a software instrument for fitting solar-like oscillation modes ("peakbagging\") in power spectra from space-based photometry. Its upcoming second release [@pbjam2] supplements the simple power-spectrum model used in the first version --- which included only radial and quadrupole ($\ell = 0, 2$) modes --- to additionally constrain other features [e.g. @{2023A&A...676A.117N}]. Dipole ($\ell = 1$) modes, which had been specifically excluded in the initial version of the tool owing to their complexity, are now specifically included. Since the primary samples of the PLATO mission consist mainly of main-sequence and subgiant stars [@plato], `PBjam` implements a parameterisation of dipole mixed-mode frequencies --- as described by their overtone spacings, boundary conditions, and other stellar properties --- that is suitable to these stars, outside the red-giant "asymptotic" regime. In keeping with the overall philosophy of `PBjam`'s design for $\ell = 0,2$, `PBjam` 2 will specify prior distributions on these parameters empirically, through predetermined values found for existing samples of solar-like oscillators. While the red giant regime has been extensively characterised observationally, the nonasymptotic construction here has not, requiring us to construct this prior sample ourselves. To assist in this task, we built a tool --- `Reggae`--- to manually fine-tune and fit the dipole-mode model, and check the quality of both our initial guesses and fitted solutions.
+`PBjam` [@{2021AJ....161...62N}] is a software instrument for fitting normal modes ("peakbagging\") in power spectra from space-based photometry of solar-like oscillators [e.g. @garcia_asteroseismology_2019]. Its upcoming second release [@pbjam2] supplements the simple power-spectrum model used in the first version --- which included only radial and quadrupole ($\ell = 0, 2$) modes --- to additionally constrain other features [e.g. @{2023A&A...676A.117N}]. Dipole ($\ell = 1$) modes, which had been specifically excluded in the initial version of the tool owing to their complexity, are now specifically included. Since the primary samples of the PLATO mission consist mainly of main-sequence and subgiant stars [@plato], `PBjam` implements a single parameterisation of dipole mixed-mode frequencies --- as described by their overtone spacings, boundary conditions, and other stellar properties --- that reduces to pure p-modes in the former, and is suitable to the latter, outside the red-giant "asymptotic" regime. In keeping with the overall philosophy of `PBjam`'s design for $\ell = 0,2$, `PBjam` 2 will specify prior distributions on these parameters empirically, through predetermined values found for existing samples of solar-like oscillators. While the red-giant asymptotic regime has been extensively characterised observationally, the nonasymptotic construction for subgiants here has not, requiring us to construct this prior sample ourselves. To assist in this task, we built a tool --- `Reggae`--- to manually fine-tune and fit the dipole-mode model, and check the quality of both our initial guesses and fitted solutions.
 
 # Statement of Need
 
