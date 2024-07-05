@@ -19,7 +19,7 @@ The data structures of PBJam version 2 and higher are completely revamped, so as
 
 ## Creating the {class}`~reggae.dipolestar.DipoleStar` Object
 
-There are two ways in which one may do this. One might first start the GUI, e.g. by running the coomand
+There are two ways in which one may do this. One might first start the GUI, e.g. by running the command
 
 ```
 python -m reggae
