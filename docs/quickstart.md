@@ -37,6 +37,8 @@ ds = DipoleStar.from_pbjam(my_star)
 window = ReggaeDebugWindow(ds)
 ```
 
+Note that one may also launch the GUI by passing a `pbjam.star` object as a positional argument. See our [test case](https://github.com/darthoctopus/reggae/blob/master/test/jamie/test.py) for more advanced manipulation of the GUI.
+
 ## Using the GUI
 
 Once the {class}`~reggae.dipolestar.DipoleStar` object has been loaded into a GUI session, you may now modify values of $\delta_{01}$, $\Delta\Pi_0$, $p_L$, and $p_D$. See [our description of the GUI itself](project:usage.md) for how to change specific properties of the PSD model. There isn't a well-defined procedure for doing this (yet). However, you may find the following pointers helpful:
