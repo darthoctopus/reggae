@@ -19,7 +19,23 @@ The data structures of PBJam version 2 and higher are completely revamped, so as
 
 ## Creating the {class}`~reggae.dipolestar.DipoleStar` Object
 
-There are two ways in which one may do this. One might first start the GUI, and select a pickle file containing a `pbjam.star` object, to load it into working memory. Alternatively, one might directly create the {class}`~reggae.dipolestar.DipoleStar` object using the `from_pbjam` class method, and then launch the GUI console later by passing it as a positional argument when initialising a {class}`~reggae.qtconsole.ReggaeDebugWindow`.
+There are two ways in which one may do this. One might first start the GUI, e.g. by running the coomand
+
+```
+python -m reggae
+```
+
+and then select a pickle file containing a `pbjam.star` object, to load it into working memory. Alternatively, one might directly create the {class}`~reggae.dipolestar.DipoleStar` object using the `from_pbjam` class method, and then launch the GUI console later by passing it as a positional argument when initialising a {class}`~reggae.qtconsole.ReggaeDebugWindow`:
+
+```
+# let's say my_star is an instance of pbjam.star.
+
+from reggae import DipoleStar
+from reggae.qtconsole import ReggaeDebugWindow
+
+ds = DipoleStar.from_pbjam(my_star)
+window = ReggaeDebugWindow(ds)
+```
 
 ## Using the GUI
 
