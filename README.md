@@ -2,6 +2,10 @@
 
 <a href="https://pb-reggae.readthedocs.io/en/latest/?badge=latest"><img src="https://readthedocs.org/projects/pb-reggae/badge/?version=latest" alt="readthedocs status" /></a>
 
+<a href="https://doi.org/10.5281/zenodo.12730547"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.12730547.svg" alt="DOI"></a>
+
+<a href="https://joss.theoj.org/papers/e6adb7a3b7cabe398f6c23297da1d3b3"><img src="https://joss.theoj.org/papers/e6adb7a3b7cabe398f6c23297da1d3b3/status.svg"></a>
+
 <!-- index.rst blurb start -->
 
 Reggae is a diagnostic tool for generating optimal parameters describing dipole mixed modes under the nonasymptotic matrix-coupling scheme of [Ong & Basu (2020)](https://ui.adsabs.harvard.edu/abs/2020ApJ...898..127O/abstract) used in the second release of [PBjam](https://github.com/grd349/PBjam) (see [Nielsen et al. 2021](https://ui.adsabs.harvard.edu/abs/2021AJ....161...62N/abstract)).
