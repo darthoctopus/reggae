@@ -24,8 +24,9 @@ affiliations:
 bibliography: ./biblio.bib
 submitted_at: '2024-02-07'
 csl-refs: yes
-software_review_url: https://github.com/openjournals/joss-reviews/issues/6588
+software_review_url: https://joss.theoj.org/papers/e6adb7a3b7cabe398f6c23297da1d3b3
 software_repository_url: https://github.com/darthoctopus/reggae
+archive_doi: 10.5281/zenodo.12730547
 editor:
   name: Daniel Foreman-Mackey
   url: https://github.com/dfm
