@@ -9,7 +9,7 @@
 project = 'reggae'
 copyright = '2024, Joel Ong, Martin Nielsen, Emily Hatt, Guy Davies, Bill Chaplin'
 author = 'Joel Ong, Martin Nielsen, Emily Hatt, Guy Davies, Bill Chaplin'
-release = '0.0.1'
+release = '0.1.0'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
