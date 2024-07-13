@@ -61,3 +61,6 @@ These visualization and tuning features are operated through a graphical user in
 # Acknowledgments
 
 JMJO acknowledges support from NASA through the NASA Hubble Fellowship grants HST-HF2-51517.001-A, awarded by STScI, which is operated by the Association of Universities for Research in Astronomy, Incorporated, under NASA contract NAS5-26555. MBN acknowledges support from the UK Space Agency.
+
+# References
+
