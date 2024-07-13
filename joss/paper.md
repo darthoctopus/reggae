@@ -23,12 +23,17 @@ affiliations:
    index: 3
 bibliography: ./biblio.bib
 submitted_at: '2024-02-07'
+published_at: '2024-07-13'
+doi: 10.21105/joss.06588
+volume: 9
+issue: 99
+page: 6588
 csl-refs: yes
 software_review_url: https://joss.theoj.org/papers/e6adb7a3b7cabe398f6c23297da1d3b3
 software_repository_url: https://github.com/darthoctopus/reggae
 archive_doi: 10.5281/zenodo.12730547
 editor:
-  name: Daniel Foreman-Mackey
+  name: Dan Foreman-Mackey
   url: https://github.com/dfm
   orcid: 0000-0002-9328-5652
 reviewers:
