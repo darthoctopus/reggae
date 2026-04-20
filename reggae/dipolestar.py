@@ -30,6 +30,10 @@ class DipoleStar:
                 r'Normalisation'
                ]
 
+
+    _extra_ndims = 1
+    _psd_model = PSDModel
+
     def __init__(self, s=None, f=None):
         self.s = s
         self.f = f
@@ -82,7 +86,7 @@ class DipoleStar:
         
         self.nmax = 10**(self.theta_asy.log_numax - self.theta_asy.log_dnu) - self.theta_asy.eps
         
-        self.l1model = PSDModel(self.f, self.norders)
+        self.l1model = self._psd_model(self.f, self.norders)
 
         self.bounds = self.get_bounds()
         
@@ -97,7 +101,7 @@ class DipoleStar:
     def __call__(self, dynamic=False, **kwargs):
 
         kwargs = {**dict(periodic=[3], reflective=[7]), **kwargs}
-        ndim = ThetaReg.dims + 1
+        ndim = ThetaReg.dims + self._extra_ndim
         if dynamic:
             sampler = dynesty.DynamicNestedSampler(self.ln_like, self.ptform, ndim, **kwargs) 
         else:
@@ -408,7 +412,7 @@ class DipoleStar:
         if solve_kwargs is None:
             solve_kwargs = {}
 
-        bounds = [[0, 1]] * (ThetaReg.dims + 1)
+        bounds = [[0, 1]] * (ThetaReg.dims + self._extra_ndim)
 
         def fun(u):
             return -self.ln_like(self.ptform(u))
