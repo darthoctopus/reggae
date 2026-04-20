@@ -147,6 +147,21 @@ class PSDModel(reggae, asymptotic):
                              asy=self.asy,
                              **kwargs)
 
+    def update_n_g(self, theta_asy, theta_reg):
+        '''
+        Populate self.n_g with reasonable n_g values
+        '''
+
+        nu_0 = self.get_nu_0(theta_asy)
+        numax = 10.**(theta_asy.log_numax)
+        dnu = 10.**(theta_asy.log_dnu)
+        
+        self.n_g = self.select_n_g(numax,
+                                  [nu_0[0] - 2*dnu, nu_0[-1] + 2*dnu],
+                                  [theta_reg.dPi0/1.2, theta_reg.dPi0*1.2],
+                                  [0, 1]
+                                  )
+
     def _l1model(self, theta_asy, theta_reg, update_n_g=False, amps=None, dnu_p=0, dnu_g=0):
         """Compute l=1 spectrum model.
 
@@ -177,11 +192,7 @@ class PSDModel(reggae, asymptotic):
         env_width = 10.**(theta_asy.log_env_width)
         
         if update_n_g or self.n_g is None:
-            self.n_g = self.select_n_g(numax,
-                                      [nu_0[0] - 2*dnu, nu_0[-1] + 2*dnu],
-                                      [theta_reg.dPi0/1.2, theta_reg.dPi0*1.2],
-                                      [0, 1]
-                                      )
+            self.update_n_g(theta_asy, theta_reg)
 
         nu_1, zeta = self.getl1(theta_asy, theta_reg, dnu_p=dnu_p, dnu_g=dnu_g)
         
