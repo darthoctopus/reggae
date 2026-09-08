@@ -1,16 +1,17 @@
 import jax.numpy as jnp
-from .reggae import reggae
+
 from .asymptotic import asymptotic
+from .reggae import reggae
+
 
 class PSDModel(reggae, asymptotic):
-
-    def __init__(self, f, n_orders, lw=1/200, nu_0=None, nu_2=None, *args, **kwargs):
-        """ Creates an instance of the spectrum model
+    def __init__(self, f, n_orders, lw=1 / 200, nu_0=None, nu_2=None, *args, **kwargs):
+        """Creates an instance of the spectrum model
 
         Consists of a set of l=0 modes and a set of multiplets for l=1 and l=2 modes.
 
         The l=1 modes are treated as mixed. The l=2 more are assumed to not be mixed.
-        
+
         Parameters
         ----------
         f: array-like
@@ -28,13 +29,13 @@ class PSDModel(reggae, asymptotic):
         self.f = f
 
         self.n_orders = n_orders
-        
+
         self.lw = lw
-        
+
         self.n_g = None
-        
+
         self.nu_0 = nu_0
-        
+
         self.nu_2 = nu_2
 
         self.asy = False
@@ -60,12 +61,12 @@ class PSDModel(reggae, asymptotic):
     #     self.n_g = None
 
     def get_nu_0(self, theta_asy):
-        """ Return the l=0 p-mode frequencies
-        
+        """Return the l=0 p-mode frequencies
+
         Parameters
         ----------
         theta_asy: data class
-            Data class containing the asymptotic parameters for p-modes. 
+            Data class containing the asymptotic parameters for p-modes.
 
         Returns
         -------
@@ -75,11 +76,11 @@ class PSDModel(reggae, asymptotic):
 
         if self.nu_0 is not None:
             return self.nu_0
-        
+
         return theta_asy.nu_0(self.n_orders)
 
     def get_nu_2(self, theta_asy):
-        """ Get the l=2 mode frequencies
+        """Get the l=2 mode frequencies
 
         Returns
         -------
@@ -93,8 +94,8 @@ class PSDModel(reggae, asymptotic):
         # TODO: return something if self.nu_2 is None
 
     def get_d02(self, theta_asy):
-        """ Compute the l=0,2 separation
-        
+        """Compute the l=0,2 separation
+
         Parameters
         ----------
         theta_asy: data class
@@ -106,10 +107,12 @@ class PSDModel(reggae, asymptotic):
             Array of local frequency differences between l=0 and l=2 modes
         """
 
-        if self.nu_2 is not None and self.nu_0 is not None: # use fitted mode freqs if available
+        if (
+            self.nu_2 is not None and self.nu_0 is not None
+        ):  # use fitted mode freqs if available
             return self.get_nu_0(None) - self.get_nu_2(None)
-        
-        return 10.**(theta_asy.log_d02)
+
+        return 10.0 ** (theta_asy.log_d02)
 
     def getl1(self, theta_asy, theta_reg, **kwargs):
         """Get the mixed l=1 mode frequencies.
@@ -127,25 +130,36 @@ class PSDModel(reggae, asymptotic):
             An array of n_g + n_p mode frequencies.
         """
 
-        numax = 10.**(theta_asy.log_numax)
+        numax = 10.0 ** (theta_asy.log_numax)
 
-        dnu = 10.**(theta_asy.log_dnu)
-        
+        dnu = 10.0 ** (theta_asy.log_dnu)
+
         d02 = self.get_d02(theta_asy)
-        
-        alpha = 10.**(theta_asy.log_alpha)
+
+        alpha = 10.0 ** (theta_asy.log_alpha)
 
         nu_0 = self.get_nu_0(theta_asy)
-        
+
         nmax = theta_asy.nmax()
-        
+
         n_p = theta_asy.n_p(self.n_orders)
 
-        return super().getl1(self.n_g, nu_0, numax, dnu, d02, n_p,
-                             theta_reg.d01, theta_reg.dPi0, theta_reg.p_L, 
-                             theta_reg.p_D, theta_reg.epsilon_g, theta_reg.alpha_g,
-                             asy=self.asy,
-                             **kwargs)
+        return super().getl1(
+            self.n_g,
+            nu_0,
+            numax,
+            dnu,
+            d02,
+            n_p,
+            theta_reg.d01,
+            theta_reg.dPi0,
+            theta_reg.p_L,
+            theta_reg.p_D,
+            theta_reg.epsilon_g,
+            theta_reg.alpha_g,
+            asy=self.asy,
+            **kwargs,
+        )
 
     def update_n_g(self, theta_asy, theta_reg):
         '''
@@ -222,7 +236,7 @@ class PSDModel(reggae, asymptotic):
         theta_reg: data class
             Data class containing a sample of l=1 mixing model parameters.
         kwargs : dict
-            Additional keyword arguments to be passed to _l1model. 
+            Additional keyword arguments to be passed to _l1model.
 
         Returns
         -------
@@ -230,15 +244,19 @@ class PSDModel(reggae, asymptotic):
             The spectrum model of a single l=1 multiplet.
         """
 
-        dnu_g = 10.**theta_reg.log_omega_core /  reggae.nu_to_omega
+        dnu_g = 10.0**theta_reg.log_omega_core / reggae.nu_to_omega
 
-        dnu_p = 10.**theta_reg.log_omega_env /  reggae.nu_to_omega
-        
+        dnu_p = 10.0**theta_reg.log_omega_env / reggae.nu_to_omega
+
         inc = theta_reg.inclination
-        
-        return (self._l1model(theta_asy, theta_reg, dnu_g=0, dnu_p=0, **kwargs) * jnp.cos(inc)**2
-        
-              + self._l1model(theta_asy, theta_reg, dnu_g=-dnu_g, dnu_p=-dnu_p, **kwargs) * jnp.sin(inc)**2 / 2
-              
-              + self._l1model(theta_asy, theta_reg, dnu_g= dnu_g, dnu_p=dnu_p,**kwargs) * jnp.sin(inc)**2 / 2
-               )
+
+        return (
+            self._l1model(theta_asy, theta_reg, dnu_g=0, dnu_p=0, **kwargs)
+            * jnp.cos(inc) ** 2
+            + self._l1model(theta_asy, theta_reg, dnu_g=-dnu_g, dnu_p=-dnu_p, **kwargs)
+            * jnp.sin(inc) ** 2
+            / 2
+            + self._l1model(theta_asy, theta_reg, dnu_g=dnu_g, dnu_p=dnu_p, **kwargs)
+            * jnp.sin(inc) ** 2
+            / 2
+        )
