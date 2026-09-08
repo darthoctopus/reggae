@@ -101,7 +101,7 @@ class DipoleStar:
     def __call__(self, dynamic=False, **kwargs):
 
         kwargs = {**dict(periodic=[3], reflective=[7]), **kwargs}
-        ndim = ThetaReg.dims + self._extra_ndim
+        ndim = ThetaReg.dims + self._extra_ndims
         if dynamic:
             sampler = dynesty.DynamicNestedSampler(self.ln_like, self.ptform, ndim, **kwargs) 
         else:
@@ -412,7 +412,7 @@ class DipoleStar:
         if solve_kwargs is None:
             solve_kwargs = {}
 
-        bounds = [[0, 1]] * (ThetaReg.dims + self._extra_ndim)
+        bounds = [[0, 1]] * (ThetaReg.dims + self._extra_ndims)
 
         def fun(u):
             return -self.ln_like(self.ptform(u))
