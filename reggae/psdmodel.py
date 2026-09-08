@@ -181,35 +181,38 @@ class PSDModel(reggae, asymptotic):
             Small frequency offset for the g-mode. Default is 0.
         Returns
         -------
-        
+
         """
         nu_0 = self.get_nu_0(theta_asy)
 
-        numax = 10.**(theta_asy.log_numax)
+        numax = 10.0 ** (theta_asy.log_numax)
 
-        dnu = 10.**(theta_asy.log_dnu)
-        
-        env_width = 10.**(theta_asy.log_env_width)
-        
+        dnu = 10.0 ** (theta_asy.log_dnu)
+
+        env_width = 10.0 ** (theta_asy.log_env_width)
+
         if update_n_g or self.n_g is None:
             self.update_n_g(theta_asy, theta_reg)
 
         nu_1, zeta = self.getl1(theta_asy, theta_reg, dnu_p=dnu_p, dnu_g=dnu_g)
-        
+
         H = self._P_envelope(nu_1, theta_reg.normalisation, numax, env_width)
-        
+
         if amps is not None:
             H = H * amps
-        
-        lw = jnp.sqrt((zeta*0+dnu*self.lw)**2 + ((1-zeta) * 10.**(theta_asy.log_mode_width))**2)
+
+        lw = jnp.sqrt(
+            (zeta * 0 + dnu * self.lw) ** 2
+            + ((1 - zeta) * 10.0 ** (theta_asy.log_mode_width)) ** 2
+        )
 
         return super().l1model(self.f, nu_1, zeta, dnu, amps=H, lw=lw)
 
     def l1model(self, theta_asy, theta_reg, **kwargs):
-        """ Create an l=1 multiplet
+        """Create an l=1 multiplet
 
         Constructs a triplet of m=-1, 0, and 1, split by a linear combination of
-        the core and envelope rotational splitting. The relative power density is 
+        the core and envelope rotational splitting. The relative power density is
         modulated the inclination of the stellar rotation axis.
 
         Parameters
